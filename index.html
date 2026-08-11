@@ -249,6 +249,8 @@
     .btn-primary:hover { background: var(--blue-dark); }
     .btn-ghost { background: #fff; color: var(--heading-text); border-color: var(--border); }
     .btn-ghost:hover { background: #f9fafb; }
+    .btn-secondary { background: #fff; color: var(--heading-text); border-color: var(--border); }
+    .btn-secondary:hover { background: #f9fafb; }
     .btn-sm { padding: 8px 12px; font-size: 13px; }
 
     .org-header { display: flex; align-items: center; gap: 16px; margin-bottom: 24px; }
@@ -1485,11 +1487,16 @@
             <div style="font-size:13px;color:var(--muted)">Sponsorship Target</div>
             <div style="font-size:30px;font-weight:800;margin:4px 0 2px">${NGN(e.target)}</div>
             <div style="font-size:12px;color:var(--muted);margin-bottom:14px">${e.budget?`of ${NGN(e.budget)} total event budget`:''}</div>
-            <button class="btn btn-primary" style="width:100%;margin-bottom:10px" onclick="startWizard(${e.id})">Edit Event</button>
             <button class="btn btn-primary" style="width:100%;margin-bottom:10px" onclick="openDrawer(${e.id})">Generate Proposal</button>
             <div style="display:flex;gap:10px;margin-bottom:10px">
-              <button class="btn btn-ghost" style="flex:1" onclick="updateEventStatus(${e.id})">Change Status</button>
-              <button class="btn btn-ghost" style="flex:1;color:var(--red)" onclick="deleteEvent(${e.id})">Delete</button>
+              <button class="btn btn-secondary" style="flex:1" onclick="startWizard(${e.id})">Edit Event</button>
+              <select class="btn btn-secondary" style="flex:1;padding:11px 15px;background:#fff;border:1px solid var(--border)" onchange="if(this.value) setEventStatus(${e.id}, this.value); this.value=''">
+                <option value="">Change Status</option>
+                <option value="Draft">Draft</option>
+                <option value="Active">Active</option>
+                <option value="Expired">Expired</option>
+              </select>
+              <button class="btn btn-secondary" style="flex:1;color:var(--red)" onclick="deleteEvent(${e.id})">Delete</button>
             </div>
             <hr style="border:none;border-top:1px solid var(--border);margin:18px 0">
             <div style="text-align:left">
@@ -1543,19 +1550,18 @@
     }
   }
 
-  function updateEventStatus(id) {
+  function setEventStatus(id, newStatus) {
     const e = MOCK.events.find(x => x.id === id);
-    const statuses = ['Draft', 'Active', 'Expired'];
-    const currentIdx = statuses.indexOf(getEventStatus(e));
-    const nextStatus = statuses[(currentIdx + 1) % statuses.length];
+    if(!e) return;
     
-    // For demo: just update the status property
-    if(nextStatus === 'Active') e.status = 'Live';
-    else if(nextStatus === 'Draft') e.status = 'Draft';
+    // Update status property
+    if(newStatus === 'Active') e.status = 'Live';
+    else if(newStatus === 'Draft') e.status = 'Draft';
     else e.status = 'Expired';
     
-    toast(`Event status updated to: ${nextStatus}`);
+    toast(`Event status updated to: ${newStatus}`);
     renderTable();
+    openProfile(id); // Refresh profile view
   }
 
   function deleteEvent(id) {
