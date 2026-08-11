@@ -1274,9 +1274,7 @@
 
       <h5 style="font-size:15px;font-weight:700;margin-bottom:2px">Sponsorship Packages</h5>
       <p class="sub-desc" style="margin-bottom:14px">Enable the tiers you want to offer and set what each includes.</p>
-      <div class="form-grid two" style="margin-bottom:16px">
-        <div class="fld"><label>Currency</label>${selFld('currency','Select currency',['NGN (₦)','USD ($)','GBP (£)'])}</div>
-      </div>
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:16px;padding:12px;background:var(--blue-light);border-radius:13px;font-size:14px;color:var(--heading-text)"><svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" style="width:18px;height:18px;color:var(--blue)"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg><b>Currency: NGN (₦)</b> — All prices in Nigerian Naira</div>
       ${wizardData.tiers.map(tierCard).join('')}
       <button class="btn btn-ghost" style="width:100%;border-style:dashed;margin-top:4px" onclick="addCustomTier()">
         <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/></svg>
@@ -1366,7 +1364,7 @@
           ${reviewCard('ic-blue','Event Basics',1,[['Event Name',fb(d.name,'—')],['Event Type',fb(d.type,'—')],['Format',fb(d.format,'Physical')],['Dates',dateStr]])}
           ${reviewCard('ic-green','Event Details',2,[['Description',d.detail?'Provided':'—'],['Key Activities',d.activities?'Provided':'—'],['Why It Matters',d.why?'Provided':'—'],['Website',d.website?'Added':'—']])}
           ${reviewCard('ic-purple','Audience',3,[['Expected Attendance',fb(d.attendance,'—')+(d.attendance?' Students':'')],['Target Audience',audienceStr],['Academic Levels',levelStr],['Location',locationLabel()]])}
-          ${reviewCard('ic-amber','Budget & Sponsorship',4,[['Event Budget',NGN(bTotal)],['Sponsorship Target',NGN(total)],['Packages',enabledTiers.length+' enabled'],['Currency',fb(d.currency,'NGN (₦)')]])}
+          ${reviewCard('ic-amber','Budget & Sponsorship',4,[['Event Budget',NGN(bTotal)],['Sponsorship Target',NGN(total)],['Packages',enabledTiers.length+' enabled'],['Currency','NGN (₦)']])}
           ${reviewCard('ic-pink','Track Record & Assets',5,[['Held Before?',d.recurring==='yes'?'Yes':'No (New event)'],['Past Attendees',fb(d.pastAttendees,'—')],['Evidence',(d.evidence||d.evidenceLink)?'Provided':'—'],['Assets',[d.banner&&'Banner',d.photos&&'Photos',d.deck&&'Deck'].filter(Boolean).join(', ')||'—']])}
         </div>
         <div class="ep-preview">
