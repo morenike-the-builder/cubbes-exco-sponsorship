@@ -1,0 +1,1625 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cubbes Exco — Sponsorship Hub</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after {
+      padding: 0;
+      margin: 0;
+      box-sizing: border-box;
+      font-family: "Inter", system-ui, sans-serif;
+    }
+
+    :root {
+      --heading-text: #192434;
+      --body-text: #616f84;
+      --muted: #9ca3af;
+      --blue: #2463eb;
+      --blue-dark: #1d4ed8;
+      --red: #e25d5d;
+      --green: #16a34a;
+      --amber: #d97706;
+      --blue-light: #f6f8fe;
+      --border: #e5e7eb;
+      --bg: #f9fafb;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--heading-text);
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* ── Layout ─────────────────────────────── */
+    .app-shell {
+      display: flex;
+      margin: 8px;
+      height: calc(100vh - 16px);
+      overflow: hidden;
+    }
+
+    /* ── Sidebar ─────────────────────────────── */
+    aside {
+      width: 280px;
+      flex-shrink: 0;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 16px 0 0 16px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow: hidden;
+      z-index: 50;
+    }
+
+    .sidebar-top { flex: 1; overflow-y: auto; }
+    .sidebar-top::-webkit-scrollbar { width: 0; }
+
+    .sidebar-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 16px;
+      position: relative;
+    }
+
+    .group-info { display: flex; align-items: center; gap: 10px; }
+
+    .group-avatar {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background-color: var(--blue-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 16px;
+      color: var(--blue);
+      flex-shrink: 0;
+    }
+
+    .group-code { font-weight: 700; font-size: 14px; color: var(--heading-text); }
+    .group-name { font-size: 11px; color: var(--body-text); max-width: 160px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+    .chevron-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+    }
+    .chevron-btn svg { width: 20px; height: 20px; }
+
+    /* Nav items */
+    nav { padding: 0 10px; }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      padding: 12px 14px;
+      border-radius: 12px;
+      margin: 4px 0;
+      text-decoration: none;
+      color: var(--body-text);
+      font-size: 14px;
+      font-weight: 500;
+      transition: background 0.15s, color 0.15s;
+      gap: 12px;
+      cursor: pointer;
+    }
+    .nav-item:hover { background-color: #f3f4f6; }
+    .nav-item.active { background-color: var(--blue); color: #fff; }
+    .nav-item svg { width: 20px; height: 20px; flex-shrink: 0; }
+
+    .nav-badge {
+      margin-left: auto;
+      font-size: 10px;
+      font-weight: 700;
+      background: #dbeafe;
+      color: var(--blue);
+      padding: 2px 8px;
+      border-radius: 999px;
+    }
+    .nav-item.active .nav-badge { background: rgba(255,255,255,0.25); color: #fff; }
+
+    /* Sidebar footer */
+    .sidebar-footer {
+      border-top: 1px solid var(--border);
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .footer-nav { display: flex; flex-direction: column; gap: 2px; }
+
+    .footer-item {
+      display: flex;
+      align-items: center;
+      padding: 12px 14px;
+      border-radius: 10px;
+      text-decoration: none;
+      color: var(--body-text);
+      font-size: 14px;
+      gap: 12px;
+      transition: background 0.15s;
+      cursor: pointer;
+    }
+    .footer-item:hover { background-color: #f3f4f6; }
+    .footer-item.danger { color: var(--red); }
+    .footer-item.danger:hover { background-color: #fef2f2; }
+    .footer-item svg { width: 20px; height: 20px; flex-shrink: 0; }
+
+    .cubbes-logo { width: 88px; }
+
+    /* ── Main area ─────────────────────────────── */
+    main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      min-width: 0;
+    }
+
+    /* ── Topbar ─────────────────────────────── */
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 72px;
+      border: 1px solid var(--border);
+      border-radius: 0 16px 16px 0;
+      padding: 0 24px;
+      background: #fff;
+      flex-shrink: 0;
+      gap: 16px;
+    }
+
+    .topbar-left { display: flex; align-items: center; gap: 12px; min-width: 0; }
+    .hamburger { display: none; background: none; border: none; cursor: pointer; color: var(--heading-text); }
+    .hamburger svg { width: 26px; height: 26px; }
+
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 14px; color: var(--body-text); }
+    .breadcrumb .crumb-link { color: var(--blue); cursor: pointer; font-weight: 600; }
+    .breadcrumb .crumb-current { color: var(--heading-text); font-weight: 600; }
+    .breadcrumb svg { width: 16px; height: 16px; color: var(--muted); }
+
+    .topbar-right { display: flex; align-items: center; gap: 14px; flex-shrink: 0; }
+
+    .session-filter {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 14px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      font-size: 13px;
+      color: var(--body-text);
+      cursor: pointer;
+      background: #fff;
+      white-space: nowrap;
+    }
+    .session-filter svg { width: 16px; height: 16px; color: var(--blue); }
+
+    .user-chip {
+      background-color: var(--blue-light);
+      padding: 7px 14px;
+      border-radius: 12px;
+      text-align: center;
+    }
+    .user-email { font-weight: 600; font-size: 13px; color: var(--heading-text); display: block; }
+    .user-role { font-size: 11px; color: var(--body-text); }
+
+    /* ── Page content ─────────────────────────────── */
+    .page-content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 24px;
+    }
+    .page-content::-webkit-scrollbar { width: 6px; }
+    .page-content::-webkit-scrollbar-thumb { background-color: #cbd5e1; border-radius: 8px; }
+    .page-content::-webkit-scrollbar-track { background-color: transparent; }
+
+    .view { display: none; }
+    .view.active { display: block; }
+
+    /* ── Reusable ─────────────────────────────── */
+    .page-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; margin-bottom: 24px; flex-wrap: wrap; }
+    .page-title { font-size: 26px; font-weight: 700; color: var(--heading-text); }
+    .page-sub { font-size: 14px; color: var(--body-text); margin-top: 4px; }
+
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      padding: 11px 18px; border-radius: 10px; font-size: 14px; font-weight: 600;
+      cursor: pointer; border: 1px solid transparent; transition: all 0.15s; white-space: nowrap;
+      text-decoration: none;
+    }
+    .btn svg { width: 18px; height: 18px; }
+    .btn-primary { background: var(--blue); color: #fff; }
+    .btn-primary:hover { background: var(--blue-dark); }
+    .btn-ghost { background: #fff; color: var(--heading-text); border-color: var(--border); }
+    .btn-ghost:hover { background: #f9fafb; }
+    .btn-sm { padding: 8px 12px; font-size: 13px; }
+
+    .org-header { display: flex; align-items: center; gap: 16px; margin-bottom: 24px; }
+    .org-avatar {
+      width: 56px; height: 56px; border-radius: 50%; background-color: var(--blue-light);
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 22px; color: var(--blue); flex-shrink: 0;
+      overflow: hidden;
+    }
+    .org-avatar img { width: 100%; height: 100%; object-fit: contain; }
+    .org-code { font-size: 22px; font-weight: 700; }
+    .org-name { font-size: 14px; color: var(--body-text); }
+
+    /* Stat cards */
+    .stat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
+    .stat-grid.five { grid-template-columns: repeat(5, 1fr); }
+    .stat-card {
+      background: #fff; border: 1px solid var(--border); border-radius: 14px;
+      padding: 18px; display: flex; align-items: center; gap: 14px;
+    }
+    .stat-icon {
+      width: 44px; height: 44px; border-radius: 12px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .stat-icon svg { width: 22px; height: 22px; }
+    .stat-value { font-size: 24px; font-weight: 700; line-height: 1.1; }
+    .stat-label { font-size: 13px; font-weight: 600; color: var(--heading-text); margin-top: 2px; }
+    .stat-hint { font-size: 11px; color: var(--muted); }
+    .ic-blue { background: #eff6ff; color: var(--blue); }
+    .ic-green { background: #ecfdf5; color: var(--green); }
+    .ic-purple { background: #f5f3ff; color: #7c3aed; }
+    .ic-amber { background: #fff7ed; color: var(--amber); }
+    .ic-pink { background: #fdf2f8; color: #db2777; }
+
+    /* ── Dashboard promo banner ─────────────────────────────── */
+    .promo {
+      background: linear-gradient(135deg, #f6f8fe 0%, #eef2ff 100%);
+      border: 1px solid #e0e7ff; border-radius: 18px; padding: 28px;
+      display: grid; grid-template-columns: 1.3fr 1fr; gap: 28px; margin-bottom: 24px;
+      position: relative; overflow: hidden;
+    }
+    .promo-tag { display: inline-flex; align-items: center; gap: 8px; font-weight: 700; font-size: 15px; color: var(--heading-text); margin-bottom: 12px; }
+    .promo-tag .nav-badge { margin-left: 0; }
+    .promo h2 { font-size: 30px; font-weight: 800; line-height: 1.15; margin-bottom: 10px; }
+    .promo h2 span { color: var(--blue); }
+    .promo p { color: var(--body-text); font-size: 14px; max-width: 440px; margin-bottom: 20px; }
+    .promo-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+    .promo-how {
+      background: rgba(255,255,255,0.7); border: 1px solid #e0e7ff; border-radius: 14px; padding: 20px;
+    }
+    .promo-how h4 { font-size: 14px; font-weight: 700; margin-bottom: 16px; }
+    .how-step { display: flex; gap: 12px; margin-bottom: 14px; }
+    .how-step:last-child { margin-bottom: 0; }
+    .how-ico { width: 34px; height: 34px; border-radius: 9px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+    .how-ico svg { width: 18px; height: 18px; }
+    .how-step b { font-size: 13px; display: block; }
+    .how-step small { font-size: 12px; color: var(--body-text); }
+
+    /* Slim dashboard banner (entry point only) */
+    .promo-slim {
+      display: flex; align-items: center; gap: 18px;
+      background: linear-gradient(135deg, #f6f8fe 0%, #eef2ff 100%);
+      border: 1px solid #e0e7ff; border-radius: 14px; padding: 18px 22px; margin-top: 4px;
+    }
+    .ps-icon { width: 48px; height: 48px; border-radius: 12px; background: #fff; border: 1px solid #e0e7ff; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .ps-icon svg { width: 26px; height: 26px; color: var(--blue); }
+    .ps-text { flex: 1; min-width: 0; }
+    .ps-text b { font-size: 15px; display: flex; align-items: center; gap: 8px; }
+    .ps-text small { font-size: 13px; color: var(--body-text); }
+    .ps-actions { display: flex; gap: 10px; flex-shrink: 0; }
+    @media (max-width: 768px) { .promo-slim { flex-direction: column; align-items: flex-start; } .ps-actions { width: 100%; } .ps-actions .btn { flex: 1; } }
+
+    /* Topbar title (dashboard style) */
+    .topbar-title { font-size: 19px; font-weight: 600; color: var(--heading-text); line-height: 1.2; }
+    .topbar-sub { font-size: 13px; color: var(--body-text); }
+
+    /* Quick actions / recent (dashboard) */
+    .dash-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+    .panel { background: #fff; border: 1px solid var(--border); border-radius: 14px; padding: 18px; }
+    .panel-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+    .panel-head h4 { font-size: 15px; font-weight: 700; }
+    .panel-head a { font-size: 13px; color: var(--blue); cursor: pointer; }
+    .quick-action { display: flex; align-items: center; gap: 12px; padding: 14px; border: 1px solid var(--border); border-radius: 12px; cursor: pointer; margin-bottom: 10px; transition: background .15s; }
+    .quick-action:hover { background: #f9fafb; }
+    .quick-action b { font-size: 14px; display: block; }
+    .quick-action small { font-size: 12px; color: var(--body-text); }
+    .empty-state { text-align: center; padding: 30px 0; color: var(--muted); }
+    .empty-state svg { width: 40px; height: 40px; margin-bottom: 10px; opacity: .5; }
+    .empty-state small { display: block; font-size: 12px; margin-top: 4px; }
+
+    /* ── Toolbar (filters) ─────────────────────────────── */
+    .toolbar { display: flex; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; align-items: center; }
+    .search-box { flex: 1; min-width: 220px; position: relative; }
+    .search-box svg { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); width: 18px; height: 18px; color: var(--muted); }
+    .search-box input { width: 100%; padding: 11px 14px 11px 42px; border: 1px solid var(--border); border-radius: 10px; font-size: 14px; }
+    select, .fld input, .fld textarea, .fld select {
+      font-size: 14px; color: var(--heading-text);
+    }
+    .filter-select { padding: 11px 14px; border: 1px solid var(--border); border-radius: 10px; font-size: 14px; background: #fff; cursor: pointer; color: var(--body-text); }
+    input:focus, select:focus, textarea:focus { outline: none; border-color: var(--blue); box-shadow: 0 0 0 3px rgba(36,99,235,.12); }
+
+    /* ── Table ─────────────────────────────── */
+    .table-wrap { background: #fff; border: 1px solid var(--border); border-radius: 14px; overflow: hidden; }
+    .table-scroll { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; min-width: 820px; }
+    thead th { text-align: left; font-size: 11px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); padding: 14px 16px; border-bottom: 1px solid var(--border); }
+    tbody td { padding: 14px 16px; border-bottom: 1px solid #f1f3f5; font-size: 14px; vertical-align: middle; }
+    tbody tr:last-child td { border-bottom: none; }
+    tbody tr:hover { background: #fafbfc; }
+
+    .event-cell { display: flex; align-items: center; gap: 12px; }
+    .event-thumb { width: 56px; height: 42px; border-radius: 8px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 8px; font-weight: 800; text-align: center; line-height: 1.1; padding: 4px; overflow: hidden; }
+    .event-name { font-weight: 600; font-size: 14px; }
+    .event-meta { font-size: 12px; color: var(--body-text); }
+    .event-loc { font-size: 11px; color: var(--muted); display: flex; align-items: center; gap: 4px; margin-top: 2px; }
+    .event-loc svg { width: 12px; height: 12px; }
+
+    .badge { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 999px; }
+    .badge-live { background: #ecfdf5; color: var(--green); }
+    .badge-draft { background: #f1f3f5; color: var(--body-text); }
+    .dot { width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+
+    .row-actions { display: flex; align-items: center; gap: 4px; }
+    .icon-btn { width: 34px; height: 34px; border-radius: 8px; border: 1px solid transparent; background: none; cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--body-text); transition: all .15s; }
+    .icon-btn:hover { background: #eff6ff; color: var(--blue); }
+    .icon-btn svg { width: 18px; height: 18px; }
+    .icon-btn.gen { color: var(--blue); }
+    .table-foot { display: flex; justify-content: space-between; align-items: center; padding: 14px 16px; font-size: 13px; color: var(--body-text); border-top: 1px solid var(--border); flex-wrap: wrap; gap: 10px; }
+    .pager { display: flex; gap: 6px; }
+    .pager button { width: 32px; height: 32px; border-radius: 8px; border: 1px solid var(--border); background: #fff; cursor: pointer; font-size: 13px; }
+    .pager button.active { background: var(--blue); color: #fff; border-color: var(--blue); }
+
+    /* ── Wizard ─────────────────────────────── */
+    .wizard-grid { display: grid; grid-template-columns: 280px 1fr; gap: 20px; align-items: start; }
+    .wiz-rail { background: #fff; border: 1px solid var(--border); border-radius: 14px; padding: 12px; position: sticky; top: 0; }
+    .wiz-step { display: flex; gap: 12px; padding: 12px; border-radius: 12px; cursor: pointer; transition: background .15s; }
+    .wiz-step:hover { background: #f9fafb; }
+    .wiz-step.active { background: var(--blue-light); }
+    .wiz-num { width: 26px; height: 26px; border-radius: 50%; background: #e5e7eb; color: var(--body-text); font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .wiz-step.active .wiz-num { background: var(--blue); color: #fff; }
+    .wiz-step.done .wiz-num { background: var(--green); color: #fff; }
+    .wiz-step b { font-size: 13px; font-weight: 600; display: block; color: var(--heading-text); }
+    .wiz-step small { font-size: 11px; color: var(--body-text); }
+
+    .wiz-panel { background: #fff; border: 1px solid var(--border); border-radius: 14px; padding: 28px; }
+    .wiz-panel h3 { font-size: 20px; font-weight: 700; }
+    .wiz-panel .wiz-desc { font-size: 13px; color: var(--body-text); margin: 4px 0 24px; padding-bottom: 16px; border-bottom: 1px solid var(--border); }
+
+    .form-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px 20px; }
+    .form-grid.two { grid-template-columns: repeat(2, 1fr); }
+    .fld { display: flex; flex-direction: column; gap: 7px; }
+    .fld.full { grid-column: 1 / -1; }
+    .fld label { font-size: 13px; font-weight: 600; }
+    .fld label .req { color: var(--red); }
+    .fld .hint { font-size: 11px; color: var(--muted); }
+    .fld input, .fld textarea, .fld select {
+      padding: 11px 13px; border: 1px solid var(--border); border-radius: 10px; font-size: 14px; width: 100%; background: #fff;
+    }
+    .fld textarea { resize: vertical; min-height: 90px; }
+    .char-wrap { position: relative; }
+    .char-count { position: absolute; right: 12px; bottom: 10px; font-size: 11px; color: var(--muted); }
+
+    .radio-row { display: flex; gap: 10px; flex-wrap: wrap; }
+    .radio-pill { display: flex; align-items: center; gap: 8px; padding: 11px 16px; border: 1px solid var(--border); border-radius: 10px; cursor: pointer; font-size: 14px; font-weight: 500; flex: 1; justify-content: center; }
+    .radio-pill input { accent-color: var(--blue); }
+    .radio-pill.checked { border-color: var(--blue); background: var(--blue-light); }
+
+    .opp-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+    .opp-card { border: 1px solid var(--border); border-radius: 12px; padding: 16px; cursor: pointer; position: relative; transition: all .15s; text-align: center; }
+    .opp-card:hover { border-color: #c7d2fe; }
+    .opp-card.checked { border-color: var(--blue); background: var(--blue-light); }
+    .opp-card .opp-check { position: absolute; top: 10px; left: 10px; width: 18px; height: 18px; border: 2px solid var(--border); border-radius: 5px; display: flex; align-items: center; justify-content: center; }
+    .opp-card.checked .opp-check { background: var(--blue); border-color: var(--blue); }
+    .opp-card.checked .opp-check svg { width: 12px; height: 12px; color: #fff; }
+    .opp-ico { width: 48px; height: 48px; border-radius: 12px; margin: 6px auto 12px; display: flex; align-items: center; justify-content: center; }
+    .opp-ico svg { width: 24px; height: 24px; }
+    .opp-card b { font-size: 14px; display: block; margin-bottom: 4px; }
+    .opp-card small { font-size: 11px; color: var(--body-text); line-height: 1.3; }
+
+    .tip-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; background: var(--blue-light); border: 1px solid #e0e7ff; border-radius: 10px; padding: 12px 16px; margin: 18px 0; font-size: 13px; color: var(--body-text); flex-wrap: wrap; }
+
+    .audience-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+    .sub-card { border: 1px solid var(--border); border-radius: 12px; padding: 18px; }
+    .sub-card h5 { font-size: 14px; font-weight: 700; }
+    .sub-card .sub-desc { font-size: 12px; color: var(--body-text); margin: 2px 0 16px; }
+    .donut-row { display: flex; align-items: center; gap: 20px; }
+    .donut { width: 130px; height: 130px; border-radius: 50%; flex-shrink: 0; position: relative;
+      background: conic-gradient(var(--blue) 0 60%, #16a34a 60% 75%, #d97706 75% 85%, #7c3aed 85% 95%, #9ca3af 95% 100%); }
+    .donut::after { content: ""; position: absolute; inset: 22px; background: #fff; border-radius: 50%; display: block; }
+    .donut-center { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 1; }
+    .donut-center b { font-size: 18px; font-weight: 700; }
+    .donut-center small { font-size: 11px; color: var(--muted); }
+    .legend { display: flex; flex-direction: column; gap: 8px; font-size: 13px; flex: 1; }
+    .legend-item { display: flex; align-items: center; gap: 8px; }
+    .legend-item .lg-dot { width: 10px; height: 10px; border-radius: 3px; flex-shrink: 0; }
+    .legend-item .lg-val { margin-left: auto; color: var(--body-text); font-weight: 600; }
+
+    /* Upload zones */
+    .upload-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+    .dropzone { border: 2px dashed #d1d5db; border-radius: 12px; padding: 28px; text-align: center; cursor: pointer; transition: all .15s; }
+    .dropzone:hover { border-color: var(--blue); background: var(--blue-light); }
+    .dropzone svg { width: 34px; height: 34px; color: var(--muted); margin-bottom: 10px; }
+    .dropzone b { font-size: 14px; display: block; }
+    .dropzone small { font-size: 12px; color: var(--muted); }
+    .dz-files { margin-top: 10px; font-size: 12px; color: var(--green); font-weight: 600; }
+
+    /* Review */
+    .review-grid { display: grid; grid-template-columns: 1fr 360px; gap: 20px; align-items: start; }
+    .review-card { border: 1px solid var(--border); border-radius: 12px; padding: 18px; margin-bottom: 16px; }
+    .review-card .rc-head { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
+    .review-card .rc-head .rc-ico { width: 34px; height: 34px; border-radius: 9px; display: flex; align-items: center; justify-content: center; }
+    .review-card .rc-head .rc-ico svg { width: 18px; height: 18px; }
+    .review-card .rc-head h5 { font-size: 15px; font-weight: 700; flex: 1; }
+    .review-card .rc-head .edit-link { font-size: 13px; color: var(--blue); cursor: pointer; display: flex; align-items: center; gap: 4px; }
+    .review-card .rc-head .edit-link svg { width: 14px; height: 14px; }
+    .rc-fields { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+    .rc-fields .rcf small { font-size: 11px; color: var(--muted); display: block; }
+    .rc-fields .rcf b { font-size: 13px; font-weight: 600; }
+
+    /* Event profile preview (review sidebar + profile page share) */
+    .ep-preview { border: 1px solid var(--border); border-radius: 14px; overflow: hidden; position: sticky; top: 0; }
+    .ep-banner { height: 130px; padding: 18px; display: flex; flex-direction: column; justify-content: center; color: #fff; position: relative; }
+    .ep-banner h3 { font-size: 19px; font-weight: 800; line-height: 1.1; }
+    .ep-banner small { font-size: 12px; opacity: .85; margin-top: 4px; }
+    .ep-body { padding: 18px; }
+    .ep-row { display: flex; align-items: center; gap: 12px; padding: 9px 0; }
+    .ep-row svg { width: 18px; height: 18px; color: var(--blue); flex-shrink: 0; }
+    .ep-row b { font-size: 13px; display: block; }
+    .ep-row small { font-size: 11px; color: var(--muted); }
+    .ep-section-title { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); margin: 16px 0 10px; }
+    .ep-opp { display: flex; align-items: center; gap: 8px; font-size: 13px; padding: 5px 0; }
+    .ep-opp svg { width: 16px; height: 16px; color: var(--green); }
+    .ep-note { background: var(--blue-light); border-radius: 10px; padding: 12px; font-size: 12px; color: var(--body-text); display: flex; gap: 8px; margin-top: 16px; }
+    .ep-note svg { width: 18px; height: 18px; color: var(--blue); flex-shrink: 0; }
+
+    .wiz-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 24px; }
+
+    /* ── Event Profile (full page) ─────────────────────────────── */
+    .profile-hero { border-radius: 16px; overflow: hidden; margin-bottom: 20px; }
+    .profile-banner { height: 240px; padding: 32px; display: flex; flex-direction: column; justify-content: flex-end; color: #fff; position: relative; }
+    .profile-banner h1 { font-size: 34px; font-weight: 800; }
+    .profile-banner .pb-uni { font-size: 16px; opacity: .9; margin-top: 6px; }
+    .profile-banner .pb-tag { position: absolute; top: 24px; left: 32px; background: rgba(255,255,255,.2); backdrop-filter: blur(4px); padding: 6px 14px; border-radius: 999px; font-size: 12px; font-weight: 600; }
+    .profile-grid { display: grid; grid-template-columns: 1fr 340px; gap: 20px; align-items: start; }
+    .profile-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 20px; }
+    .pstat { background: #fff; border: 1px solid var(--border); border-radius: 12px; padding: 16px; }
+    .pstat small { font-size: 12px; color: var(--muted); display: block; }
+    .pstat b { font-size: 20px; font-weight: 700; }
+    .profile-section { background: #fff; border: 1px solid var(--border); border-radius: 14px; padding: 22px; margin-bottom: 16px; }
+    .profile-section h4 { font-size: 16px; font-weight: 700; margin-bottom: 12px; }
+    .profile-section p { font-size: 14px; color: var(--body-text); line-height: 1.6; }
+    .opp-list { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .opp-list .ol { display: flex; align-items: center; gap: 10px; border: 1px solid var(--border); border-radius: 10px; padding: 12px; }
+    .opp-list .ol-ico { width: 34px; height: 34px; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .opp-list .ol-ico svg { width: 18px; height: 18px; }
+    .profile-aside { position: sticky; top: 0; }
+    .cta-card { background: #fff; border: 1px solid var(--border); border-radius: 14px; padding: 22px; text-align: center; }
+    .cta-card h4 { font-size: 17px; font-weight: 700; margin-bottom: 6px; }
+    .cta-card p { font-size: 13px; color: var(--body-text); margin-bottom: 18px; }
+    .asset-thumb { height: 70px; border-radius: 8px; background: #f1f3f5; display: flex; align-items: center; justify-content: center; color: var(--muted); font-size: 12px; gap: 6px; }
+    .asset-thumb svg { width: 18px; height: 18px; }
+
+    /* ── Drawer ─────────────────────────────── */
+    .overlay { position: fixed; inset: 0; background: rgba(15,23,42,.45); z-index: 100; opacity: 0; pointer-events: none; transition: opacity .2s; }
+    .overlay.open { opacity: 1; pointer-events: auto; }
+    .drawer {
+      position: fixed; top: 0; right: 0; height: 100%; width: 440px; max-width: 92vw; background: #fff; z-index: 101;
+      box-shadow: -8px 0 40px rgba(0,0,0,.12); transform: translateX(100%); transition: transform .25s ease;
+      display: flex; flex-direction: column;
+    }
+    .drawer.open { transform: translateX(0); }
+    .drawer-head { padding: 22px 24px 16px; border-bottom: 1px solid var(--border); }
+    .drawer-head .dh-top { display: flex; justify-content: space-between; align-items: flex-start; }
+    .drawer-head h3 { font-size: 19px; font-weight: 700; }
+    .drawer-head p { font-size: 13px; color: var(--body-text); margin-top: 4px; }
+    .drawer-body { flex: 1; overflow-y: auto; padding: 22px 24px; }
+    .drawer-foot { padding: 18px 24px; border-top: 1px solid var(--border); }
+    .close-x { background: none; border: none; cursor: pointer; color: var(--muted); }
+    .close-x svg { width: 22px; height: 22px; }
+
+    .step-label { display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 700; margin: 18px 0 12px; }
+    .step-label:first-child { margin-top: 0; }
+    .step-num { width: 22px; height: 22px; border-radius: 50%; background: var(--blue); color: #fff; font-size: 12px; display: flex; align-items: center; justify-content: center; }
+
+    .brand-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+    .brand-chip { border: 1px solid var(--border); border-radius: 12px; padding: 14px 8px; display: flex; flex-direction: column; align-items: center; gap: 8px; cursor: pointer; transition: all .15s; }
+    .brand-chip:hover { border-color: #c7d2fe; }
+    .brand-chip.checked { border-color: var(--blue); background: var(--blue-light); box-shadow: 0 0 0 1px var(--blue); }
+    .brand-logo { width: 34px; height: 34px; border-radius: 9px; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 800; font-size: 14px; }
+    .brand-chip span { font-size: 12px; font-weight: 600; }
+
+    .opt-list { display: flex; flex-direction: column; gap: 8px; }
+    .opt-row { display: flex; align-items: center; gap: 10px; padding: 11px 14px; border: 1px solid var(--border); border-radius: 10px; cursor: pointer; font-size: 14px; }
+    .opt-row.checked { border-color: var(--blue); background: var(--blue-light); }
+    .opt-row input { accent-color: var(--blue); }
+
+    .ai-note { background: var(--blue-light); border-radius: 10px; padding: 12px 14px; font-size: 12px; color: var(--body-text); display: flex; gap: 8px; margin-top: 18px; }
+    .ai-note svg { width: 18px; height: 18px; color: var(--blue); flex-shrink: 0; }
+
+    /* Proposal result modal */
+    .modal { position: fixed; inset: 0; z-index: 110; display: none; align-items: center; justify-content: center; padding: 20px; }
+    .modal.open { display: flex; }
+    .modal-card { background: #fff; border-radius: 16px; width: 720px; max-width: 100%; max-height: 88vh; display: flex; flex-direction: column; box-shadow: 0 20px 60px rgba(0,0,0,.25); }
+    .modal-head { padding: 20px 24px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+    .modal-head h3 { font-size: 18px; font-weight: 700; }
+    .modal-body { flex: 1; overflow-y: auto; padding: 24px; }
+    .proposal-doc { font-size: 14px; line-height: 1.7; color: #334155; white-space: pre-wrap; }
+    .proposal-doc h2 { font-size: 18px; color: var(--heading-text); margin: 18px 0 8px; }
+    .modal-foot { padding: 16px 24px; border-top: 1px solid var(--border); display: flex; gap: 10px; flex-wrap: wrap; justify-content: flex-end; }
+
+    .modal-sm .modal-card { width: 460px; }
+    .share-url { display: flex; gap: 8px; margin-top: 14px; }
+    .share-url input { flex: 1; padding: 11px 13px; border: 1px solid var(--border); border-radius: 10px; font-size: 13px; }
+
+    /* Toast */
+    .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(20px); background: #111827; color: #fff; padding: 12px 20px; border-radius: 10px; font-size: 14px; z-index: 200; opacity: 0; pointer-events: none; transition: all .25s; display: flex; align-items: center; gap: 10px; }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+    .toast svg { width: 18px; height: 18px; color: #4ade80; }
+
+    .spinner { width: 18px; height: 18px; border: 2px solid rgba(255,255,255,.4); border-top-color: #fff; border-radius: 50%; animation: spin .7s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── Responsive ─────────────────────────────── */
+    .sidebar-overlay { display: none; }
+    @media (max-width: 1100px) {
+      .promo { grid-template-columns: 1fr; }
+      .dash-grid { grid-template-columns: 1fr; }
+      .stat-grid, .stat-grid.five { grid-template-columns: repeat(2, 1fr); }
+      .wizard-grid { grid-template-columns: 1fr; }
+      .wiz-rail { position: static; display: flex; gap: 8px; overflow-x: auto; padding: 8px; }
+      .wiz-rail .wiz-step { flex-direction: column; align-items: center; min-width: 90px; text-align: center; }
+      .wiz-rail .wiz-step small { display: none; }
+      .review-grid, .profile-grid { grid-template-columns: 1fr; }
+      .ep-preview, .profile-aside, .wiz-rail { position: static; }
+    }
+    @media (max-width: 820px) {
+      .form-grid, .form-grid.two { grid-template-columns: 1fr; }
+      .opp-grid { grid-template-columns: 1fr 1fr; }
+      .audience-grid, .upload-grid, .opp-list { grid-template-columns: 1fr; }
+      .rc-fields { grid-template-columns: 1fr 1fr; }
+      .profile-stats { grid-template-columns: 1fr 1fr; }
+      .brand-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 768px) {
+      .app-shell { margin: 0; height: 100vh; }
+      aside {
+        position: fixed; left: 0; top: 0; height: 100%; border-radius: 0; transform: translateX(-100%);
+        transition: transform .25s ease;
+      }
+      aside.open { transform: translateX(0); }
+      .sidebar-overlay { display: block; position: fixed; inset: 0; background: rgba(15,23,42,.45); z-index: 49; opacity: 0; pointer-events: none; transition: opacity .2s; }
+      .sidebar-overlay.open { opacity: 1; pointer-events: auto; }
+      .topbar { border-radius: 0; }
+      .hamburger { display: flex; }
+      .session-filter, .user-role { display: none; }
+      .page-content { padding: 16px; }
+      .stat-grid, .stat-grid.five { grid-template-columns: 1fr; }
+      .opp-grid { grid-template-columns: 1fr; }
+      .page-title { font-size: 22px; }
+      .promo { padding: 20px; }
+      .promo h2 { font-size: 24px; }
+      .modal { padding: 0; align-items: flex-end; }
+      .modal-card { max-height: 92vh; border-radius: 16px 16px 0 0; }
+    }
+  </style>
+</head>
+<body>
+  <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar(false)"></div>
+  <div class="app-shell">
+
+    <!-- ── Sidebar ── -->
+    <aside id="sidebar">
+      <div class="sidebar-top">
+        <div class="sidebar-header">
+          <div class="group-info">
+            <div class="group-avatar">SU</div>
+            <div>
+              <p class="group-code">SU-UNILAG</p>
+              <p class="group-name">Student Union, University of Lagos</p>
+            </div>
+          </div>
+          <button class="chevron-btn" aria-label="Switch association">
+            <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" /></svg>
+          </button>
+        </div>
+
+        <nav>
+          <a class="nav-item active" data-view="dashboard" onclick="navTo('dashboard')">
+            <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3 9.75L12 3l9 6.75V21a.75.75 0 01-.75.75H3.75A.75.75 0 013 21V9.75z" /><path stroke-linecap="round" stroke-linejoin="round" d="M9 21V12h6v9" /></svg>
+            Dashboard
+          </a>
+          <a class="nav-item">
+            <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5z" /></svg>
+            Payments
+          </a>
+          <a class="nav-item">
+            <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" /></svg>
+            Events &amp; Tickets
+          </a>
+          <a class="nav-item">
+            <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 01-1.043 3.296 3.745 3.745 0 01-3.296 1.043A3.745 3.745 0 0112 21c-1.268 0-2.39-.63-3.068-1.593a3.745 3.745 0 01-3.296-1.043 3.745 3.745 0 01-1.043-3.296A3.745 3.745 0 013 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 011.043-3.296 3.745 3.745 0 013.296-1.043A3.745 3.745 0 0112 3c1.268 0 2.39.63 3.068 1.593a3.745 3.745 0 013.296 1.043 3.745 3.745 0 011.043 3.296A3.745 3.745 0 0121 12z" /></svg>
+            Voting System
+          </a>
+          <a class="nav-item">
+            <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z" /></svg>
+            Students
+          </a>
+          <a class="nav-item" data-view="hub-home" onclick="navTo('hub-home')">
+            <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.182 15.182a4.5 4.5 0 01-6.364 0M21 12a9 9 0 11-18 0 9 9 0 0118 0zM9.75 9.75c0 .414-.168.75-.375.75S9 10.164 9 9.75 9.168 9 9.375 9s.375.336.375.75zm-.375 0h.008v.015h-.008V9.75zm5.625 0c0 .414-.168.75-.375.75s-.375-.336-.375-.75.168-.75.375-.75.375.336.375.75zm-.375 0h.008v.015h-.008V9.75z" /></svg>
+            Sponsorship Hub
+            <span class="nav-badge">New</span>
+          </a>
+          <a class="nav-item">
+            <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.431l-1.003.827c-.293.24-.438.613-.431.992a6.759 6.759 0 010 .255c-.007.378.138.75.43.99l1.005.828c.424.35.534.954.26 1.43l-1.298 2.247a1.125 1.125 0 01-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.57 6.57 0 01-.22.128c-.331.183-.581.495-.644.869l-.213 1.28c-.09.543-.56.941-1.11.941h-2.594c-.55 0-1.02-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 01-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 01-1.369-.49l-1.297-2.247a1.125 1.125 0 01.26-1.431l1.004-.827c.292-.24.437-.613.43-.992a6.932 6.932 0 010-.255c.007-.378-.138-.75-.43-.99l-1.004-.828a1.125 1.125 0 01-.26-1.43l1.297-2.247a1.125 1.125 0 011.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.087.22-.128.332-.183.582-.495.644-.869l.214-1.281z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+            Settings
+          </a>
+        </nav>
+      </div>
+
+      <div class="sidebar-footer">
+        <div class="footer-nav">
+          <a class="footer-item">
+            <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" /></svg>
+            Cubbes Pay Guide
+          </a>
+          <a class="footer-item">
+            <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 18.75a6 6 0 006-6v-1.5m-6 7.5a6 6 0 01-6-6v-1.5m6 7.5v3.75m-3.75 0h7.5M12 15.75a3 3 0 01-3-3V4.5a3 3 0 116 0v8.25a3 3 0 01-3 3z" /></svg>
+            Talk to Support
+          </a>
+          <a class="footer-item danger">
+            <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" /></svg>
+            Logout
+          </a>
+        </div>
+        <img src="https://cdn.prod.cubbes.app/user-avatars/png-assets/cubbes-black-logo.png" alt="Cubbes" class="cubbes-logo" />
+      </div>
+    </aside>
+
+    <!-- ── Main ── -->
+    <main>
+      <div class="topbar">
+        <div class="topbar-left">
+          <button class="hamburger" onclick="toggleSidebar(true)" aria-label="Open menu">
+            <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" /></svg>
+          </button>
+          <div id="topbarTitle">
+            <div class="topbar-title">Dashboard</div>
+            <div class="topbar-sub">Dashboard Overview on what's happening with the association.</div>
+          </div>
+        </div>
+        <div class="topbar-right">
+          <div class="session-filter">
+            <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" /></svg>
+            Filter by Session/Date
+            <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" style="color:var(--muted)"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" /></svg>
+          </div>
+          <div class="user-chip">
+            <span class="user-email">admin@university.edu.ng</span>
+            <span class="user-role">Association Admin</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="page-content">
+
+        <!-- ════════ DASHBOARD ════════ -->
+        <section class="view active" id="view-dashboard">
+          <div class="org-header">
+            <div class="org-avatar">SU</div>
+            <div>
+              <h1 class="org-code">SU-UNILAG</h1>
+              <p class="org-name">Student Union, University of Lagos</p>
+            </div>
+          </div>
+
+          <div class="stat-grid">
+            <div class="stat-card"><div class="stat-icon ic-blue"><svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0z" /></svg></div><div><div class="stat-value">4,812</div><div class="stat-label">Total Students</div></div></div>
+            <div class="stat-card"><div class="stat-icon ic-green"><svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5z" /></svg></div><div><div class="stat-value">1,230</div><div class="stat-label">Active Payments</div></div></div>
+            <div class="stat-card"><div class="stat-icon ic-amber"><svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25" /></svg></div><div><div class="stat-value">7</div><div class="stat-label">Active Events</div></div></div>
+            <div class="stat-card"><div class="stat-icon ic-pink"><svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75" /></svg></div><div><div class="stat-value">3</div><div class="stat-label">Active Votes</div></div></div>
+          </div>
+
+          <!-- Sponsorship Hub entry point -->
+          <div class="promo-slim">
+            <div class="ps-icon"><svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.182 15.182a4.5 4.5 0 01-6.364 0M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div>
+            <div class="ps-text"><b>Sponsorship Hub <span class="nav-badge">New</span></b><small>List your events and get discovered by brands looking to sponsor student communities.</small></div>
+            <div class="ps-actions">
+              <button class="btn btn-ghost btn-sm" onclick="navTo('hub-home')">Explore Hub</button>
+              <button class="btn btn-primary btn-sm" onclick="startWizard()">List an Event</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- ════════ SPONSORSHIP HUB (LANDING) ════════ -->
+        <section class="view" id="view-hub-home">
+          <div class="page-head">
+            <div>
+              <h1 class="page-title">Sponsorship Hub</h1>
+              <p class="page-sub">List your events, attract sponsors, and track brand interest — all in one place.</p>
+            </div>
+            <button class="btn btn-primary" onclick="startWizard()">
+              <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/></svg>
+              List an Event
+            </button>
+          </div>
+
+          <!-- Sponsorship Hub promo -->
+          <div class="promo">
+            <div>
+              <div class="promo-tag">
+                <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="#2463eb"><path stroke-linecap="round" stroke-linejoin="round" d="M15.182 15.182a4.5 4.5 0 01-6.364 0M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                Sponsorship Hub <span class="nav-badge">New</span>
+              </div>
+              <h2>Get your events <span>discovered</span> by brands.</h2>
+              <p>List your events, attract sponsors, and get the support you need to make your events bigger and better.</p>
+            </div>
+            <div class="promo-how">
+              <h4>How it works</h4>
+              <div class="how-step"><div class="how-ico ic-blue"><svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25" /></svg></div><div><b>1. List your event</b><small>Add details about your upcoming event</small></div></div>
+              <div class="how-step"><div class="how-ico ic-green"><svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg></div><div><b>2. Get discovered</b><small>Brands find events that match their goals</small></div></div>
+              <div class="how-step"><div class="how-ico ic-amber"><svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 11.25v8.25a1.5 1.5 0 01-1.5 1.5H5.25a1.5 1.5 0 01-1.5-1.5v-8.25M12 4.875A2.625 2.625 0 109.375 7.5H12m0-2.625V7.5m0-2.625A2.625 2.625 0 1114.625 7.5H12m0 0V21m-8.625-9.75h18c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125h-18c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z" /></svg></div><div><b>3. Get sponsored</b><small>Receive sponsorships and grow your event</small></div></div>
+            </div>
+          </div>
+
+          <div class="stat-grid five">
+            <div class="stat-card"><div class="stat-icon ic-blue"><svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25" /></svg></div><div><div class="stat-value" id="hs-total">6</div><div class="stat-label">Total Events</div><div class="stat-hint">All time</div></div></div>
+            <div class="stat-card"><div class="stat-icon ic-green"><svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" /></svg></div><div><div class="stat-value" id="hs-live">4</div><div class="stat-label">Live &amp; Discoverable</div><div class="stat-hint">Visible to brands</div></div></div>
+            <div class="stat-card"><div class="stat-icon ic-purple"><svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" /></svg></div><div><div class="stat-value">18</div><div class="stat-label">Profile Views</div><div class="stat-hint">In the last 30 days</div></div></div>
+            <div class="stat-card"><div class="stat-icon ic-amber"><svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.182 15.182a4.5 4.5 0 01-6.364 0M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg></div><div><div class="stat-value">5</div><div class="stat-label">Brand Interests</div><div class="stat-hint">In the last 30 days</div></div></div>
+            <div class="stat-card"><div class="stat-icon ic-amber"><svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 18.75h-9m9 0a3 3 0 013 3h-15a3 3 0 013-3m9 0v-3.375c0-.621-.503-1.125-1.125-1.125h-.871M7.5 18.75v-3.375c0-.621.504-1.125 1.125-1.125h.872m5.007 0H9.497m5.007 0a7.454 7.454 0 01-.982-3.172M9.497 14.25a7.454 7.454 0 00.981-3.172M5.25 4.236c-.982.143-1.954.317-2.916.52A6.003 6.003 0 007.73 9.728M5.25 4.236V4.5c0 2.108.966 3.99 2.48 5.228M5.25 4.236V2.721C7.456 2.41 9.71 2.25 12 2.25c2.291 0 4.545.16 6.75.47v1.516M7.73 9.728a6.726 6.726 0 002.748 1.35m8.272-6.842V4.5c0 2.108-.966 3.99-2.48 5.228m2.48-5.492a46.32 46.32 0 012.916.52 6.003 6.003 0 01-5.395 4.972m0 0a6.726 6.726 0 01-2.749 1.35m0 0a6.772 6.772 0 01-3.044 0" /></svg></div><div><div class="stat-value">2</div><div class="stat-label">Sponsorships Secured</div><div class="stat-hint">This session</div></div></div>
+          </div>
+
+          <div style="margin:8px 0 14px">
+            <h2 style="font-size:18px;font-weight:700">My Listed Events</h2>
+            <p class="page-sub">All the events you've listed on Cubbes for brands to discover.</p>
+          </div>
+
+          <div class="toolbar">
+            <div class="search-box">
+              <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" /></svg>
+              <input type="text" id="evSearch" placeholder="Search events by name or type..." oninput="renderEvents()" />
+            </div>
+            <select class="filter-select" id="evStatus" onchange="renderEvents()"><option value="">All Status</option><option>Live</option><option>Draft</option></select>
+            <select class="filter-select" id="evType" onchange="renderEvents()"><option value="">All Event Types</option></select>
+            <select class="filter-select" id="evFormat" onchange="renderEvents()"><option value="">All Formats</option><option>Physical</option><option>Virtual</option><option>Hybrid</option></select>
+            <select class="filter-select" id="evSort" onchange="renderEvents()"><option value="newest">Sort by: Newest</option><option value="target">Sort by: Target</option><option value="views">Sort by: Views</option></select>
+          </div>
+
+          <div class="table-wrap">
+            <div class="table-scroll">
+              <table>
+                <thead><tr><th>Event</th><th>Date</th><th>Attendance</th><th>Sponsorship Target</th><th>Status</th><th>Views</th><th>Interests</th><th>Actions</th></tr></thead>
+                <tbody id="eventsTbody"></tbody>
+              </table>
+            </div>
+            <div class="table-foot">
+              <span id="evCount">Showing 0 events</span>
+              <div class="pager"><button>‹</button><button class="active">1</button><button>›</button></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ════════ LIST AN EVENT (WIZARD) ════════ -->
+        <section class="view" id="view-list-event">
+          <div class="page-head">
+            <div>
+              <h1 class="page-title" id="wizTitle">List an Event</h1>
+              <p class="page-sub">Fill in the details below to get your event discovered by brands.</p>
+            </div>
+            <div style="display:flex;gap:10px;">
+              <button class="btn btn-ghost" onclick="saveDraft()">Save as Draft</button>
+              <button class="btn btn-primary" onclick="goStep(6)">
+                Preview Event Profile
+                <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" /></svg>
+              </button>
+            </div>
+          </div>
+
+          <div class="wizard-grid">
+            <div class="wiz-rail" id="wizRail"></div>
+            <div class="wiz-panel">
+              <div id="wizStepContent"></div>
+              <div class="wiz-footer">
+                <button class="btn btn-ghost" id="wizBack" onclick="prevStep()">
+                  <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" /></svg>
+                  Back
+                </button>
+                <button class="btn btn-primary" id="wizNext" onclick="nextStep()">Next</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ════════ EVENT PROFILE ════════ -->
+        <section class="view" id="view-event-profile">
+          <div id="profileContent"></div>
+        </section>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- ── Proposal Drawer ── -->
+  <div class="overlay" id="drawerOverlay" onclick="closeDrawer()"></div>
+  <div class="drawer" id="proposalDrawer">
+    <div class="drawer-head">
+      <div class="dh-top">
+        <h3>Generate Sponsorship Proposal</h3>
+        <button class="close-x" onclick="closeDrawer()"><svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg></button>
+      </div>
+      <p>Create a professional, tailored proposal for any brand in seconds using AI.</p>
+    </div>
+    <div class="drawer-body">
+      <div class="step-label"><span class="step-num">1</span> Select Target Brand</div>
+      <div class="brand-grid" id="brandGrid"></div>
+
+      <div class="step-label"><span class="step-num">2</span> Proposal Type</div>
+      <div class="opt-list" id="propTypeList"></div>
+
+      <div class="step-label"><span class="step-num">3</span> Proposal Length</div>
+      <div class="opt-list" id="propLenList"></div>
+
+      <div class="ai-note">
+        <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" /></svg>
+        AI will customize the content, benefits and messaging based on the selected brand.
+      </div>
+    </div>
+    <div class="drawer-foot">
+      <button class="btn btn-primary" id="genBtn" style="width:100%" onclick="generateProposal()">
+        <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" /></svg>
+        Generate Proposal
+      </button>
+    </div>
+  </div>
+
+  <!-- ── Proposal Result Modal ── -->
+  <div class="modal" id="proposalModal">
+    <div class="modal-card">
+      <div class="modal-head">
+        <h3>Your Proposal</h3>
+        <button class="close-x" onclick="closeModal('proposalModal')"><svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg></button>
+      </div>
+      <div class="modal-body"><div class="proposal-doc" id="proposalDoc"></div></div>
+      <div class="modal-foot">
+        <button class="btn btn-ghost btn-sm" onclick="copyProposal()">Copy Text</button>
+        <button class="btn btn-ghost btn-sm" onclick="toast('PDF export queued (demo)')">Export PDF</button>
+        <button class="btn btn-ghost btn-sm" onclick="toast('PowerPoint export queued (demo)')">Export PPT</button>
+        <button class="btn btn-primary btn-sm" onclick="toast('Share link copied (demo)')">Share Link</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Share Modal ── -->
+  <div class="modal modal-sm" id="shareModal">
+    <div class="modal-card">
+      <div class="modal-head">
+        <h3>Share Event Profile</h3>
+        <button class="close-x" onclick="closeModal('shareModal')"><svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg></button>
+      </div>
+      <div class="modal-body">
+        <p style="font-size:14px;color:var(--body-text)">Anyone with this link can view the public sponsorship page.</p>
+        <div class="share-url">
+          <input type="text" id="shareUrl" readonly />
+          <button class="btn btn-primary btn-sm" onclick="copyShare()">Copy</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"><svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg><span id="toastMsg"></span></div>
+
+  <script>
+  /* ════════════════════════════════════════════════════════════
+     AI swap point — mirrors AI_CONFIG pattern used elsewhere.
+     useBackend=false → templated proposal generated client-side.
+     useBackend=true  → POST to backend route (server/routes).
+     ════════════════════════════════════════════════════════════ */
+  const AI_CONFIG = {
+    useBackend: false,
+    endpoint: '/api/generate-proposal'
+  };
+
+  /* ── Mock data ────────────────────────────── */
+  const GRADIENTS = {
+    'Faculty of Engineering Week 2026': 'linear-gradient(135deg,#3730a3,#7c3aed)',
+    'Tech Summit 2026': 'linear-gradient(135deg,#1e1b4b,#4338ca)',
+    'Sports Fiesta 2026': 'linear-gradient(135deg,#065f46,#16a34a)',
+    'Entrepreneurship Week 2026': 'linear-gradient(135deg,#92400e,#d97706)',
+    'Career Fair 2026': 'linear-gradient(135deg,#0c4a6e,#0284c7)',
+    'Cultural Day 2026': 'linear-gradient(135deg,#831843,#db2777)'
+  };
+  function gradFor(name){ return GRADIENTS[name] || 'linear-gradient(135deg,#1e293b,#2463eb)'; }
+
+  let MOCK = {
+    events: [
+      { id:1, name:'Faculty of Engineering Week 2026', type:'Academic / Faculty Event', tagline:'Innovate. Collaborate. Elevate.', start:'May 18, 2026', end:'May 22, 2026', dateShort:'May 18 – May 22, 2026', duration:'5 Days', attendance:3500, target:2000000, budget:3200000, status:'Live', views:12, interests:3, university:'University of Lagos', location:'Lagos, Nigeria', format:'Physical', audience:'Engineering Students', level:'Undergraduate (100–500 Level)', opps:['Headline Sponsor','Booth Sponsor','Product Sampling','Workshop Sponsor'], reach:'12,500+', email:'2,800+', recurring:true, created:6 },
+      { id:2, name:'Tech Summit 2026', type:'Conference / Summit', tagline:'Build. Connect. Inspire.', start:'Jun 10, 2026', end:'Jun 11, 2026', dateShort:'Jun 10 – Jun 11, 2026', duration:'2 Days', attendance:1200, target:1500000, budget:2400000, status:'Live', views:8, interests:2, university:'Nile University', location:'Abuja, Nigeria', format:'Hybrid', audience:'Tech & Science Students', level:'Undergraduate', opps:['Headline Sponsor','Booth Sponsor','Workshop Sponsor'], reach:'6,400+', email:'1,500+', recurring:false, created:5 },
+      { id:3, name:'Sports Fiesta 2026', type:'Sports Event', tagline:'One Sport. One Victory.', start:'Jul 3, 2026', end:'Jul 5, 2026', dateShort:'Jul 3 – Jul 5, 2026', duration:'3 Days', attendance:2000, target:1000000, budget:1600000, status:'Live', views:6, interests:1, university:'University of Lagos', location:'Lagos, Nigeria', format:'Physical', audience:'General Students', level:'All Levels', opps:['Headline Sponsor','Booth Sponsor','Product Sampling'], reach:'9,200+', email:'2,100+', recurring:true, created:4 },
+      { id:4, name:'Entrepreneurship Week 2026', type:'Academic / Entrepreneurship', tagline:'Ideas. Action. Impact.', start:'Aug 17, 2026', end:'Aug 21, 2026', dateShort:'Aug 17 – Aug 21, 2026', duration:'5 Days', attendance:1500, target:1200000, budget:1900000, status:'Live', views:5, interests:1, university:'Nile University', location:'Abuja, Nigeria', format:'Physical', audience:'Business Students', level:'Undergraduate', opps:['Headline Sponsor','Booth Sponsor','Recruitment Partner'], reach:'5,800+', email:'1,200+', recurring:true, created:3 },
+      { id:5, name:'Career Fair 2026', type:'Career / Networking Event', tagline:'Your Future Starts Here.', start:'Sep 24, 2026', end:'Sep 24, 2026', dateShort:'Sep 24, 2026', duration:'1 Day', attendance:800, target:700000, budget:1100000, status:'Draft', views:0, interests:0, university:'University of Lagos', location:'Lagos, Nigeria', format:'Physical', audience:'Final Year Students', level:'400–500 Level', opps:['Recruitment Partner','Booth Sponsor'], reach:'4,100+', email:'900+', recurring:false, created:2 },
+      { id:6, name:'Cultural Day 2026', type:'Cultural Event', tagline:'Celebrate. Connect. Culture.', start:'Oct 15, 2026', end:'Oct 15, 2026', dateShort:'Oct 15, 2026', duration:'1 Day', attendance:1000, target:600000, budget:950000, status:'Draft', views:0, interests:0, university:'Nile University', location:'Abuja, Nigeria', format:'Physical', audience:'General Students', level:'All Levels', opps:['Headline Sponsor','Booth Sponsor'], reach:'3,500+', email:'700+', recurring:false, created:1 }
+    ],
+    brands: [
+      { name:'OPay', color:'#16a34a', initial:'O' },
+      { name:'MTN', color:'#facc15', initial:'M' },
+      { name:'Airtel', color:'#dc2626', initial:'A' },
+      { name:'Sterling', color:'#dc2626', initial:'S' },
+      { name:'GTBank', color:'#ea580c', initial:'G' },
+      { name:'Coca-Cola', color:'#dc2626', initial:'C' },
+      { name:'Google', color:'#4285F4', initial:'G' },
+      { name:'Flutterwave', color:'#f59e0b', initial:'F' },
+      { name:'Custom Brand', color:'#64748b', initial:'+' }
+    ]
+  };
+
+  const NGN = n => '₦' + Number(n).toLocaleString('en-NG');
+
+  /* ── Navigation / router ────────────────────────────── */
+  const HUB_VIEWS = ['hub-home','list-event','event-profile'];
+  const VIEW_META = {
+    'dashboard':     { crumbs:[['Dashboard',null]] },
+    'hub-home':      { crumbs:[['Sponsorship Hub',null]] },
+    'list-event':    { crumbs:[['Sponsorship Hub','hub-home'],['List an Event',null]] },
+    'event-profile': { crumbs:[['Sponsorship Hub','hub-home'],['Event Profile',null]] }
+  };
+
+  function navTo(view){
+    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+    document.getElementById('view-' + view).classList.add('active');
+    // sidebar active state — all hub sub-views light up the Sponsorship Hub entry
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    const navView = view==='dashboard' ? 'dashboard' : (HUB_VIEWS.includes(view) ? 'hub-home' : view);
+    const nav = document.querySelector('.nav-item[data-view="'+navView+'"]');
+    if (nav) nav.classList.add('active');
+    // topbar — title+subtitle on dashboard, breadcrumb elsewhere
+    const tt = document.getElementById('topbarTitle');
+    if (view==='dashboard'){
+      tt.innerHTML = '<div class="topbar-title">Dashboard</div><div class="topbar-sub">Dashboard Overview on what\'s happening with the association.</div>';
+    } else {
+      const crumbs = (VIEW_META[view]||{crumbs:[['Dashboard',null]]}).crumbs;
+      tt.innerHTML = '<div class="breadcrumb">' + crumbs.map((c,i)=>{
+        const sep = i>0 ? '<svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5"/></svg>' : '';
+        return sep + (c[1] ? '<span class="crumb-link" onclick="navTo(\''+c[1]+'\')">'+c[0]+'</span>' : '<span class="crumb-current">'+c[0]+'</span>');
+      }).join('') + '</div>';
+    }
+    document.querySelector('.page-content').scrollTop = 0;
+    toggleSidebar(false);
+  }
+
+  function toggleSidebar(open){
+    document.getElementById('sidebar').classList.toggle('open', open);
+    document.getElementById('sidebarOverlay').classList.toggle('open', open);
+  }
+
+  /* ── My Listed Events table ────────────────────────────── */
+  function renderEvents(){
+    const q = (document.getElementById('evSearch').value||'').toLowerCase();
+    const st = document.getElementById('evStatus').value;
+    const ty = document.getElementById('evType').value;
+    const fm = document.getElementById('evFormat').value;
+    const sort = document.getElementById('evSort').value;
+
+    let rows = MOCK.events.filter(e =>
+      (!q || e.name.toLowerCase().includes(q) || e.type.toLowerCase().includes(q)) &&
+      (!st || e.status===st) && (!ty || e.type===ty) && (!fm || e.format===fm)
+    );
+    rows.sort((a,b)=> sort==='target' ? b.target-a.target : sort==='views' ? b.views-a.views : b.created-a.created);
+
+    const tb = document.getElementById('eventsTbody');
+    tb.innerHTML = rows.map(e => `
+      <tr>
+        <td>
+          <div class="event-cell">
+            <div class="event-thumb" style="background:${gradFor(e.name)}">${e.name.toUpperCase()}</div>
+            <div>
+              <div class="event-name">${e.name}</div>
+              <div class="event-meta">${e.type}</div>
+              <div class="event-loc"><svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"/></svg>${e.university}</div>
+            </div>
+          </div>
+        </td>
+        <td>${e.dateShort}</td>
+        <td>${e.attendance.toLocaleString()} Students</td>
+        <td><b>${NGN(e.target)}</b></td>
+        <td><span class="badge ${e.status==='Live'?'badge-live':'badge-draft'}"><span class="dot"></span>${e.status}</span></td>
+        <td>${e.views}</td>
+        <td>${e.interests}</td>
+        <td>
+          <div class="row-actions">
+            <button class="icon-btn" title="View" onclick="openProfile(${e.id})"><svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg></button>
+            <button class="icon-btn" title="Edit" onclick="startWizard(${e.id})"><svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931z"/></svg></button>
+            <button class="icon-btn gen" title="Generate Proposal" onclick="openDrawer(${e.id})"><svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z"/></svg></button>
+            <button class="icon-btn" title="Share" onclick="openShare(${e.id})"><svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M7.217 10.907a2.25 2.25 0 100 2.186m0-2.186c.18.324.283.696.283 1.093s-.103.77-.283 1.093m0-2.186l9.566-5.314m-9.566 7.5l9.566 5.314m0 0a2.25 2.25 0 103.935 2.186 2.25 2.25 0 00-3.935-2.186zm0-12.814a2.25 2.25 0 103.933-2.185 2.25 2.25 0 00-3.933 2.185z"/></svg></button>
+          </div>
+        </td>
+      </tr>`).join('') || `<tr><td colspan="8" style="text-align:center;padding:40px;color:var(--muted)">No events match your filters.</td></tr>`;
+
+    document.getElementById('evCount').textContent = `Showing 1 to ${rows.length} of ${MOCK.events.length} events`;
+    document.getElementById('hs-total').textContent = MOCK.events.length;
+    document.getElementById('hs-live').textContent = MOCK.events.filter(e=>e.status==='Live').length;
+  }
+
+  function populateTypeFilter(){
+    const sel = document.getElementById('evType');
+    const types = [...new Set(MOCK.events.map(e=>e.type))];
+    types.forEach(t => { const o=document.createElement('option'); o.textContent=t; sel.appendChild(o); });
+  }
+
+  /* ── Dashboard recent panels ────────────────────────────── */
+
+  /* ════════ WIZARD ════════ */
+  // Executive's account profile — university/faculty/location are known, so we don't ask for them.
+  const PROFILE = { university:'University of Lagos', faculty:'Student Union', location:'Akoka, Lagos' };
+
+  const WIZ_STEPS = [
+    { t:'Event Basics', d:'Name, type, format and dates' },
+    { t:'Event Details', d:'Description and highlights' },
+    { t:'Audience', d:'Who your event reaches' },
+    { t:'Sponsorship Packages', d:'Tiers and pricing' },
+    { t:'Track Record & Assets', d:'Past editions and uploads' },
+    { t:'Review & Publish', d:'Review your information' }
+  ];
+  const LAST_STEP = WIZ_STEPS.length;
+  let currentStep = 1;
+  let editingId = null;
+  let wizardData = {};
+
+  const AUDIENCE_OPTIONS = ['Campus-wide (All Students)','Engineering Students','Science Students','Business Students','Arts and Social Sciences','Medical Students','Law Students','Final Year Students','Postgraduate Students'];
+  const LEVEL_OPTIONS = ['100 Level','200 Level','300 Level','400 Level','500 Level','Postgraduate'];
+
+  function defaultTiers(){
+    return [
+      { title:'Headline Sponsor', amount:'', benefits:'', enabled:false, custom:false },
+      { title:'Gold', amount:'', benefits:'', enabled:false, custom:false },
+      { title:'Silver', amount:'', benefits:'', enabled:false, custom:false },
+      { title:'Bronze', amount:'', benefits:'', enabled:false, custom:false }
+    ];
+  }
+  function defaultBudget(){
+    return [
+      { category:'Venue & Logistics', cost:'' },
+      { category:'Publicity & Branding', cost:'' },
+      { category:'Refreshments', cost:'' },
+      { category:'Speakers / Guests', cost:'' },
+      { category:'Awards & Prizes', cost:'' }
+    ];
+  }
+
+  function blankWizard(){
+    return { name:'', type:'', format:'Physical', venue:'', start:'', end:'',
+      detail:'', activities:'', why:'', hashtags:'', website:'',
+      attendance:'', audiences:[], levels:[], audienceValue:'',
+      currency:'NGN (₦)', budgetItems:defaultBudget(), tiers:defaultTiers(),
+      recurring:'no', pastAttendees:'', evidence:'', evidenceLink:'',
+      banner:'', photos:'', deck:'' };
+  }
+
+  function tiersFromEvent(e){
+    const base = defaultTiers();
+    base.forEach(t=>{ if (e.opps.includes(t.title)) t.enabled = true; });
+    e.opps.filter(o=>!base.some(t=>t.title===o)).forEach(o=> base.push({ title:o, amount:'', benefits:'', enabled:true, custom:true }));
+    const first = base.find(t=>t.enabled);
+    if (first) first.amount = e.target;
+    return base;
+  }
+
+  function startWizard(id){
+    editingId = id || null;
+    if (id){
+      const e = MOCK.events.find(x=>x.id===id);
+      wizardData = Object.assign(blankWizard(), {
+        name:e.name, type:e.type, format:e.format==='Hybrid'?'Physical':e.format, venue:'',
+        start:e.start, end:e.end, attendance:e.attendance,
+        audiences: e.audience ? e.audience.split(', ') : [],
+        levels: e.level && e.level!=='All Levels' ? e.level.split(', ') : [],
+        budgetItems: e.budget ? [{ category:'Total event budget', cost:e.budget }] : defaultBudget(),
+        tiers: tiersFromEvent(e),
+        recurring: e.recurring ? 'yes' : 'no'
+      });
+      document.getElementById('wizTitle').textContent = 'Edit Event';
+    } else {
+      wizardData = blankWizard();
+      document.getElementById('wizTitle').textContent = 'List an Event';
+    }
+    currentStep = 1;
+    navTo('list-event');
+    renderWizard();
+  }
+
+  function goStep(n){ currentStep = n; renderWizard(); document.querySelector('.page-content').scrollTop = 0; }
+  function nextStep(){ if (currentStep < LAST_STEP){ goStep(currentStep+1); } else { publishEvent(); } }
+  function prevStep(){ if (currentStep > 1) goStep(currentStep-1); }
+
+  function renderWizard(){
+    document.getElementById('wizRail').innerHTML = WIZ_STEPS.map((s,i)=>{
+      const n=i+1; const cls = n===currentStep?'active':(n<currentStep?'done':'');
+      const inner = n<currentStep
+        ? '<svg fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg>'
+        : n;
+      return `<div class="wiz-step ${cls}" onclick="goStep(${n})"><div class="wiz-num">${inner}</div><div><b>${s.t}</b><small>${s.d}</small></div></div>`;
+    }).join('');
+
+    document.getElementById('wizBack').style.visibility = currentStep===1 ? 'hidden' : 'visible';
+    const next = document.getElementById('wizNext');
+    next.innerHTML = currentStep===LAST_STEP
+      ? 'Publish Event <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5"/></svg>'
+      : 'Next: ' + (WIZ_STEPS[currentStep] ? WIZ_STEPS[currentStep].t : '') + ' <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/></svg>';
+
+    document.getElementById('wizStepContent').innerHTML = STEP_RENDERERS[currentStep]();
+    bindCharCounters();
+  }
+
+  // shorthands
+  const esc = (s) => (s??'').toString().replace(/"/g,'&quot;');
+  const W = (k) => `value="${esc(wizardData[k])}" oninput="wizardData['${k}']=this.value"`;
+  const WS = (k) => `onchange="wizardData['${k}']=this.value"`;
+  function opt(list, sel){ return list.map(o=>`<option ${o===sel?'selected':''}>${o}</option>`).join(''); }
+  function selFld(k, placeholder, list){
+    return `<select ${WS(k)}><option value="" ${!wizardData[k]?'selected':''} disabled hidden>${placeholder}</option>${opt(list, wizardData[k])}</select>`;
+  }
+  function multiChips(key, list){
+    return `<div class="radio-row" style="flex-wrap:wrap;gap:8px">${list.map(v=>{
+      const on = wizardData[key].includes(v);
+      return `<label class="radio-pill ${on?'checked':''}" style="flex:0 0 auto;gap:6px" onclick="toggleMulti('${key}','${v}')">${on?'<svg style="width:15px;height:15px" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg>':''}${v}</label>`;
+    }).join('')}</div>`;
+  }
+  function fmtDate(v){ if(!v) return ''; const dt=new Date(v); return isNaN(dt)?v:dt.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}); }
+  function dateRange(){ const s=fmtDate(wizardData.start), e=fmtDate(wizardData.end); return s&&e ? (s===e?s:`${s} – ${e}`) : (s||e||''); }
+  function durationDays(){ const a=wizardData.start,b=wizardData.end; if(!a||!b) return ''; const diff=Math.round((new Date(b)-new Date(a))/86400000)+1; return diff>0?diff+' Day'+(diff>1?'s':''):''; }
+  function tierTotal(){ return wizardData.tiers.filter(t=>t.enabled).reduce((s,t)=>s+(Number(t.amount)||0),0); }
+  function locationLabel(){ return wizardData.format==='Virtual' ? 'Virtual / Online' : (wizardData.venue ? `${wizardData.venue}, ${PROFILE.location}` : `${PROFILE.location} (on campus)`); }
+
+  const STEP_RENDERERS = {
+    1: () => `
+      <h3>Event Basics</h3><p class="wiz-desc">Tell us the basics — we already know your university and faculty from your profile.</p>
+      <div class="form-grid two">
+        <div class="fld full"><label>Event Name <span class="req">*</span></label><input placeholder="e.g. Faculty of Engineering Week 2026" ${W('name')} /></div>
+        <div class="fld"><label>Event Type <span class="req">*</span></label>${selFld('type','Select event type',['Academic / Faculty Event','Conference / Summit','Sports Event','Career / Networking Event','Cultural Event','Innovation Challenge','Dinner & Awards'])}</div>
+        <div class="fld"><label>Format <span class="req">*</span></label>
+          <div class="radio-row">
+            ${['Physical','Virtual'].map(f=>`<label class="radio-pill ${wizardData.format===f?'checked':''}" onclick="wizardData.format='${f}';renderWizard()"><input type="radio" name="fmt" ${wizardData.format===f?'checked':''}> ${f}</label>`).join('')}
+          </div>
+        </div>
+        ${ wizardData.format==='Physical' ? `
+        <div class="fld full">
+          <div class="ai-note" style="margin:0"><svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"/></svg>Location will default to <b style="margin:0 4px">${PROFILE.university}, ${PROFILE.location}</b>. Add a specific venue below if you already have one.</div>
+        </div>
+        <div class="fld full"><label>Specific Venue (Optional)</label><input placeholder="e.g. Main Auditorium — you can add this later" ${W('venue')} /><span class="hint">Don't worry if you don't know the exact venue yet.</span></div>
+        ` : `
+        <div class="fld full"><div class="ai-note" style="margin:0"><svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 017.843 4.582M12 3a8.997 8.997 0 00-7.843 4.582"/></svg>This is an online event — no physical location needed.</div></div>
+        `}
+        <div class="fld"><label>Start Date &amp; Time <span class="req">*</span></label><input type="datetime-local" ${W('start')} /></div>
+        <div class="fld"><label>End Date &amp; Time <span class="req">*</span></label><input type="datetime-local" ${W('end')} /></div>
+      </div>`,
+    2: () => `
+      <h3>Event Details</h3><p class="wiz-desc">Describe your event so brands understand what they'd be part of.</p>
+      <div class="form-grid">
+        <div class="fld full"><label>Event Description <span class="req">*</span></label>
+          <div class="char-wrap"><textarea maxlength="1000" placeholder="Provide a clear description of your event, its purpose and what attendees can expect..." oninput="wizardData.detail=this.value">${wizardData.detail||''}</textarea><span class="char-count" data-for>${(wizardData.detail||'').length}/1000</span></div>
+        </div>
+        <div class="fld" style="grid-column:span 1.5"><label>Key Activities / Highlights <span class="req">*</span></label>
+          <div class="char-wrap"><textarea maxlength="500" placeholder="List the major activities, sessions, performances, etc." oninput="wizardData.activities=this.value">${wizardData.activities||''}</textarea><span class="char-count" data-for>${(wizardData.activities||'').length}/500</span></div>
+        </div>
+        <div class="fld" style="grid-column:span 1.5"><label>Why This Event Matters <span class="req">*</span></label>
+          <div class="char-wrap"><textarea maxlength="500" placeholder="Explain the impact and importance of this event for students." oninput="wizardData.why=this.value">${wizardData.why||''}</textarea><span class="char-count" data-for>${(wizardData.why||'').length}/500</span></div>
+        </div>
+        <div class="fld"><label>Event Hashtags (Optional)</label><input placeholder="e.g. #EngWeek2026" ${W('hashtags')} /></div>
+        <div class="fld" style="grid-column:span 2"><label>Website / Registration Link (Optional)</label><input placeholder="https://example.com" ${W('website')} /></div>
+      </div>`,
+    3: () => `
+      <h3>Audience</h3><p class="wiz-desc">Who will this event reach? Pick everything that applies.</p>
+      <div class="form-grid two" style="margin-bottom:22px">
+        <div class="fld"><label>Expected Attendance <span class="req">*</span></label><input type="number" placeholder="e.g. 3500" ${W('attendance')} /><span class="hint">Total number of people expected to attend</span></div>
+      </div>
+      <div class="fld full" style="margin-bottom:10px"><label>Target Audience <span class="req">*</span></label><span class="hint">Select all that apply — pick "Campus-wide" if your event is open to the whole school.</span></div>
+      ${multiChips('audiences', AUDIENCE_OPTIONS)}
+      <div class="fld full" style="margin:22px 0 10px"><label>Academic Levels <span class="req">*</span></label><span class="hint">Select every level that will attend.</span></div>
+      ${multiChips('levels', LEVEL_OPTIONS)}
+      <div class="fld full" style="margin-top:22px"><label>Why This Audience Is Valuable (Optional)</label><span class="hint">Helps brands see the fit — but you can skip it.</span>
+        <div class="char-wrap" style="margin-top:7px"><textarea maxlength="600" placeholder="e.g. Highly engaged final-year engineering students actively looking for tools, internships and graduate roles." oninput="wizardData.audienceValue=this.value">${wizardData.audienceValue||''}</textarea><span class="char-count" data-for>${(wizardData.audienceValue||'').length}/600</span></div>
+      </div>`,
+    4: () => {
+      const total = tierTotal();
+      const tierCard = (t,i) => `
+        <div style="border:1px solid ${t.enabled?'var(--blue)':'var(--border)'};background:${t.enabled?'var(--blue-light)':'#fff'};border-radius:12px;padding:14px 16px;margin-bottom:12px">
+          <div style="display:flex;align-items:center;gap:12px">
+            <input type="checkbox" style="accent-color:var(--blue);width:18px;height:18px;flex-shrink:0" ${t.enabled?'checked':''} onchange="toggleTier(${i})">
+            ${ t.custom
+              ? `<input placeholder="Package name (e.g. Platinum)" value="${esc(t.title)}" oninput="setTier(${i},'title',this.value)" style="flex:1;font-weight:700;font-size:15px;border:none;border-bottom:1px solid var(--border);background:transparent;padding:4px 0" />`
+              : `<b style="flex:1;font-size:15px">${t.title}</b>` }
+            ${ t.custom ? `<button class="close-x" title="Remove" onclick="removeTier(${i})"><svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" style="width:18px;height:18px"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg></button>` : '' }
+          </div>
+          ${ t.enabled ? `
+          <div style="display:grid;grid-template-columns:200px 1fr;gap:10px;margin-top:12px">
+            <input type="number" placeholder="Amount (₦)" value="${esc(t.amount)}" oninput="setTier(${i},'amount',this.value)" style="padding:10px 12px;border:1px solid var(--border);border-radius:8px;font-size:14px" />
+            <input placeholder="What this package includes (logo, booth, speaking slot...)" value="${esc(t.benefits)}" oninput="setTier(${i},'benefits',this.value)" style="padding:10px 12px;border:1px solid var(--border);border-radius:8px;font-size:14px" />
+          </div>` : '' }
+        </div>`;
+      const bTotal = budgetTotal();
+      const coverage = bTotal ? Math.round(total/bTotal*100) : 0;
+      const budgetRow = (b,i) => `
+        <div style="display:grid;grid-template-columns:1fr 190px 38px;gap:10px;margin-bottom:8px;align-items:center">
+          <input placeholder="Item / category (e.g. Venue & logistics)" value="${esc(b.category)}" oninput="setBudget(${i},'category',this.value)" style="padding:10px 12px;border:1px solid var(--border);border-radius:8px;font-size:14px" />
+          <input type="number" placeholder="Cost (₦)" value="${esc(b.cost)}" oninput="setBudget(${i},'cost',this.value)" style="padding:10px 12px;border:1px solid var(--border);border-radius:8px;font-size:14px" />
+          <button class="icon-btn" title="Remove" onclick="removeBudgetItem(${i})"><svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg></button>
+        </div>`;
+      return `
+      <h3>Budget &amp; Sponsorship</h3><p class="wiz-desc">Show what the event costs to run, then set the sponsorship packages that help fund it.</p>
+
+      <h5 style="font-size:15px;font-weight:700;margin-bottom:2px">Event Budget Breakdown</h5>
+      <p class="sub-desc" style="margin-bottom:14px">List the main cost categories and their estimated cost — we'll total it for you.</p>
+      <div style="display:grid;grid-template-columns:1fr 190px 38px;gap:10px;margin-bottom:8px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.03em;color:var(--muted)"><span>Item / Category</span><span>Estimated Cost</span><span></span></div>
+      ${wizardData.budgetItems.map(budgetRow).join('')}
+      <button class="btn btn-ghost btn-sm" style="border-style:dashed;margin-top:4px" onclick="addBudgetItem()">
+        <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/></svg>
+        Add Budget Item
+      </button>
+      <div class="tip-bar" style="margin-top:16px;justify-content:space-between;background:#f8fafc">
+        <span><b>Total Event Budget</b><br><span style="font-size:12px">What it costs to run this event.</span></span>
+        <span style="font-size:22px;font-weight:800;color:var(--heading-text)" id="budgetTotal">${NGN(bTotal)}</span>
+      </div>
+
+      <hr style="border:none;border-top:1px solid var(--border);margin:24px 0">
+
+      <h5 style="font-size:15px;font-weight:700;margin-bottom:2px">Sponsorship Packages</h5>
+      <p class="sub-desc" style="margin-bottom:14px">Enable the tiers you want to offer and set what each includes.</p>
+      <div class="form-grid two" style="margin-bottom:16px">
+        <div class="fld"><label>Currency</label>${selFld('currency','Select currency',['NGN (₦)','USD ($)','GBP (£)'])}</div>
+      </div>
+      ${wizardData.tiers.map(tierCard).join('')}
+      <button class="btn btn-ghost" style="width:100%;border-style:dashed;margin-top:4px" onclick="addCustomTier()">
+        <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/></svg>
+        Add Custom Package
+      </button>
+      <div class="tip-bar" style="margin-top:16px;justify-content:space-between">
+        <span><b>Total Sponsorship Target</b><br><span style="font-size:12px">Auto-calculated from the packages you enable.</span></span>
+        <span style="font-size:22px;font-weight:800;color:var(--blue)" id="tierTotal">${NGN(total)}</span>
+      </div>
+      ${ bTotal ? `<div class="ai-note" style="margin-top:14px"><svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z"/></svg>Sponsors would cover about <b style="margin:0 4px">${coverage}%</b> of your total event budget.</div>` : '' }`;
+    },
+    5: () => `
+      <h3>Track Record &amp; Assets</h3><p class="wiz-desc">Proof of past turnout and a few visuals go a long way with brands.</p>
+      <div class="fld full" style="margin-bottom:12px"><label>Has this event been held before?</label>
+        <div class="radio-row">
+          <label class="radio-pill ${wizardData.recurring==='yes'?'checked':''}" onclick="wizardData.recurring='yes';renderWizard()"><input type="radio" name="rec" ${wizardData.recurring==='yes'?'checked':''}> Yes, it's happened before</label>
+          <label class="radio-pill ${wizardData.recurring==='no'?'checked':''}" onclick="wizardData.recurring='no';renderWizard()"><input type="radio" name="rec" ${wizardData.recurring==='no'?'checked':''}> No, this is a new event</label>
+        </div>
+      </div>
+      ${ wizardData.recurring==='yes' ? `
+      <div class="sub-card" style="margin-bottom:20px">
+        <h5>Past Editions</h5>
+        <p class="sub-desc">Show brands the turnout you've delivered before.</p>
+        <div class="form-grid two" style="gap:14px;align-items:end">
+          <div class="fld"><label>How many attendees last time?</label><input type="number" placeholder="e.g. 3,000" ${W('pastAttendees')} /></div>
+          <div class="fld"><label>Evidence link (Optional)</label><input placeholder="Link to photos, recap or coverage" ${W('evidenceLink')} /></div>
+        </div>
+        <div class="fld full" style="margin-top:14px"><label>Or upload proof of attendance (Optional)</label>
+          <div class="dropzone" style="padding:20px" onclick="fakeUpload('evidence','Attendance proof')">
+            <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909M18 9h.008"/></svg>
+            <b>Upload an image / screenshot</b><small>A crowd photo or turnout report works great</small>
+            <div class="dz-files" id="dz-evidence">${wizardData.evidence?'✓ '+wizardData.evidence:''}</div>
+          </div>
+        </div>
+      </div>` : '' }
+      <div class="fld full" style="margin-bottom:10px"><label>Event Assets</label><span class="hint">All optional at this stage — you can come back and add these later.</span></div>
+      <div class="upload-grid">
+        ${[['Event Banner','Optional · PNG or JPG','banner'],['Event Photos','Optional · up to 10 photos','photos'],['Sponsorship Deck','Optional · PDF or PPT','deck']].map(u=>`
+          <div class="dropzone" onclick="fakeUpload('${u[2]}','${u[0]}')">
+            <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"/></svg>
+            <b>${u[0]}</b><small>${u[1]}</small>
+            <div class="dz-files" id="dz-${u[2]}">${wizardData[u[2]] ? '✓ '+wizardData[u[2]] : ''}</div>
+          </div>`).join('')}
+      </div>`,
+    6: () => renderReview()
+  };
+
+  function toggleMulti(key,val){
+    const arr = wizardData[key]; const i = arr.indexOf(val);
+    if (i>=0) arr.splice(i,1); else arr.push(val);
+    renderWizard();
+  }
+  function toggleTier(i){ wizardData.tiers[i].enabled = !wizardData.tiers[i].enabled; renderWizard(); }
+  function setTier(i,k,v){ wizardData.tiers[i][k]=v; if (k==='amount'){ const el=document.getElementById('tierTotal'); if(el) el.textContent=NGN(tierTotal()); } }
+  function addCustomTier(){ wizardData.tiers.push({ title:'', amount:'', benefits:'', enabled:true, custom:true }); renderWizard(); }
+  function removeTier(i){ wizardData.tiers.splice(i,1); renderWizard(); }
+  function budgetTotal(){ return wizardData.budgetItems.reduce((s,b)=>s+(Number(b.cost)||0),0); }
+  function setBudget(i,k,v){ wizardData.budgetItems[i][k]=v; if (k==='cost'){ const el=document.getElementById('budgetTotal'); if(el) el.textContent=NGN(budgetTotal()); } }
+  function addBudgetItem(){ wizardData.budgetItems.push({ category:'', cost:'' }); renderWizard(); }
+  function removeBudgetItem(i){ wizardData.budgetItems.splice(i,1); renderWizard(); }
+  function fakeUpload(key,label){
+    wizardData[key] = label.replace(/\s+/g,'_')+'.file';
+    const el = document.getElementById('dz-'+key); if (el) el.textContent = '✓ '+wizardData[key];
+    toast(label+' attached (demo)');
+  }
+  function bindCharCounters(){
+    document.querySelectorAll('.char-wrap textarea').forEach(t=>{
+      const c = t.parentElement.querySelector('.char-count');
+      if (c) t.addEventListener('input', ()=> c.textContent = t.value.length + '/' + t.maxLength);
+    });
+  }
+
+  function renderReview(){
+    const d = wizardData;
+    const fb = (v,f)=> v || f;
+    const enabledTiers = d.tiers.filter(t=>t.enabled && t.title);
+    const total = enabledTiers.reduce((s,t)=>s+(Number(t.amount)||0),0);
+    const bTotal = budgetTotal();
+    const oppTitles = enabledTiers.length ? enabledTiers.map(t=>t.title) : ['Headline Sponsor'];
+    const audienceStr = d.audiences.length ? d.audiences.join(', ') : 'Campus-wide';
+    const levelStr = d.levels.length ? d.levels.join(', ') : 'All Levels';
+    const dateStr = fb(dateRange(),'Dates TBD');
+    return `
+      <div class="review-grid">
+        <div>
+          <h3>Review &amp; Publish</h3><p class="wiz-desc">Please review all details below. You can go back to edit any section.</p>
+          ${reviewCard('ic-blue','Event Basics',1,[['Event Name',fb(d.name,'—')],['Event Type',fb(d.type,'—')],['Format',fb(d.format,'Physical')],['Dates',dateStr]])}
+          ${reviewCard('ic-green','Event Details',2,[['Description',d.detail?'Provided':'—'],['Key Activities',d.activities?'Provided':'—'],['Why It Matters',d.why?'Provided':'—'],['Website',d.website?'Added':'—']])}
+          ${reviewCard('ic-purple','Audience',3,[['Expected Attendance',fb(d.attendance,'—')+(d.attendance?' Students':'')],['Target Audience',audienceStr],['Academic Levels',levelStr],['Location',locationLabel()]])}
+          ${reviewCard('ic-amber','Budget & Sponsorship',4,[['Event Budget',NGN(bTotal)],['Sponsorship Target',NGN(total)],['Packages',enabledTiers.length+' enabled'],['Currency',fb(d.currency,'NGN (₦)')]])}
+          ${reviewCard('ic-pink','Track Record & Assets',5,[['Held Before?',d.recurring==='yes'?'Yes':'No (New event)'],['Past Attendees',fb(d.pastAttendees,'—')],['Evidence',(d.evidence||d.evidenceLink)?'Provided':'—'],['Assets',[d.banner&&'Banner',d.photos&&'Photos',d.deck&&'Deck'].filter(Boolean).join(', ')||'—']])}
+        </div>
+        <div class="ep-preview">
+          <div class="ep-banner" style="background:${gradFor(d.name)}">
+            <span style="font-size:10px;font-weight:700;letter-spacing:.05em;opacity:.8">EVENT PREVIEW</span>
+            <h3>${fb(d.name,'Your Event Name')}</h3>
+            <small>${PROFILE.university}</small>
+          </div>
+          <div class="ep-body">
+            ${epRow('M15 10.5a3 3 0 11-6 0 3 3 0 016 0z',locationLabel(),PROFILE.university)}
+            ${epRow('M18 18.72a9.094 9.094 0 003.741-.479 3 3 0 00-4.682-2.72m.94 3.198l.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0112 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 016 18.719m12 0a5.971 5.971 0 00-.941-3.197m0 0A5.995 5.995 0 0012 12.75a5.995 5.995 0 00-5.058 2.772m0 0a3 3 0 00-4.681 2.72 8.986 8.986 0 003.74.477m.94-3.197a5.971 5.971 0 00-.94 3.197M15 6.75a3 3 0 11-6 0 3 3 0 016 0z',fb(d.attendance,'—')+' Students','Expected Attendance')}
+            ${epRow('M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25',fb(durationDays(),'—'),dateStr)}
+            ${epRow('M15.182 15.182a4.5 4.5 0 01-6.364 0M21 12a9 9 0 11-18 0 9 9 0 0118 0z',audienceStr,'Target Audience')}
+            ${epRow('M9 8.25H7.5a2.25 2.25 0 00-2.25 2.25v9a2.25 2.25 0 002.25 2.25h9a2.25 2.25 0 002.25-2.25v-9a2.25 2.25 0 00-2.25-2.25H15M9 12l2 2 4-4m-6-3.75h6a1.125 1.125 0 001.125-1.125v-1.5A1.125 1.125 0 0015 2.25H9a1.125 1.125 0 00-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z',NGN(bTotal),'Total Event Budget')}
+            ${epRow('M16.5 18.75h-9m9 0a3 3 0 013 3h-15a3 3 0 013-3m9 0v-3.375c0-.621-.503-1.125-1.125-1.125h-.871M7.5 18.75v-3.375',NGN(total),'Sponsorship Target')}
+            <div class="ep-section-title">Sponsor Packages</div>
+            ${oppTitles.map(o=>`<div class="ep-opp"><svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>${o}</div>`).join('')}
+            <div class="ep-note"><svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.34 15.84c-.688-.06-1.386-.09-2.09-.09H7.5a4.5 4.5 0 110-9h.75c.704 0 1.402-.03 2.09-.09m0 9.18c.253.962.584 1.892.985 2.783.247.55.06 1.21-.463 1.511l-.657.38c-.551.318-1.26.117-1.527-.461a20.845 20.845 0 01-1.44-4.282m3.102.069a18.03 18.03 0 01-.59-4.59c0-1.586.205-3.124.59-4.59m0 9.18a23.848 23.848 0 018.835 2.535M10.34 6.66a23.847 23.847 0 008.835-2.535m0 0A23.74 23.74 0 0018.795 3m.38 1.125a23.91 23.91 0 011.014 5.395m-1.014 8.855c-.118.38-.245.754-.38 1.125m.38-1.125a23.91 23.91 0 001.014-5.395m0-3.46c.495.413.811 1.035.811 1.73 0 .695-.316 1.317-.811 1.73m0-3.46a24.347 24.347 0 010 3.46"/></svg>Your event will be discoverable by thousands of brands looking to reach student communities.</div>
+          </div>
+        </div>
+      </div>`;
+  }
+  function reviewCard(ic,title,step,fields){
+    return `<div class="review-card">
+      <div class="rc-head"><div class="rc-ico ${ic}"><svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z"/></svg></div><h5>${title}</h5><span class="edit-link" onclick="goStep(${step})"><svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931z"/></svg>Edit</span></div>
+      <div class="rc-fields">${fields.map(f=>`<div class="rcf"><small>${f[0]}</small><b>${f[1]}</b></div>`).join('')}</div>
+    </div>`;
+  }
+  function epRow(path,a,b){ return `<div class="ep-row"><svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="${path}"/></svg><div><b>${a}</b><small>${b}</small></div></div>`; }
+
+  function saveDraft(){ toast('Saved as draft'); }
+  function publishEvent(){
+    const d = wizardData;
+    if (!d.name){ goStep(1); toast('Please add an event name first'); return; }
+    const enabledTiers = d.tiers.filter(t=>t.enabled && t.title);
+    const total = enabledTiers.reduce((s,t)=>s+(Number(t.amount)||0),0);
+    const bTotal = budgetTotal();
+    const oppTitles = enabledTiers.length ? enabledTiers.map(t=>t.title) : ['Headline Sponsor'];
+    const audienceStr = d.audiences.length ? d.audiences.join(', ') : 'Campus-wide Students';
+    const levelStr = d.levels.length ? d.levels.join(', ') : 'All Levels';
+    if (editingId){
+      const e = MOCK.events.find(x=>x.id===editingId);
+      Object.assign(e,{ name:d.name, type:d.type||e.type, format:d.format,
+        location:locationLabel(), university:PROFILE.university,
+        dateShort:dateRange()||e.dateShort, duration:durationDays()||e.duration,
+        attendance:Number(d.attendance)||e.attendance, target:total||e.target, budget:bTotal||e.budget,
+        audience:audienceStr, level:levelStr, opps:oppTitles, recurring:d.recurring==='yes' });
+      toast('Event updated & published');
+    } else {
+      const id = Math.max(...MOCK.events.map(e=>e.id))+1;
+      MOCK.events.unshift({ id, name:d.name, type:d.type||'Academic / Faculty Event', tagline:'',
+        start:d.start, end:d.end, dateShort:dateRange()||'TBD',
+        duration:durationDays()||'1 Day', attendance:Number(d.attendance)||0,
+        target:total, budget:bTotal, status:'Live', views:0, interests:0,
+        university:PROFILE.university, location:locationLabel(), format:d.format,
+        audience:audienceStr, level:levelStr, opps:oppTitles, reach:'—', email:'—',
+        recurring:d.recurring==='yes', created:Date.now() });
+      toast('🎉 Event published & live on Cubbes Grow');
+    }
+    populateTypeFilterRefresh();
+    renderEvents();
+    navTo('hub-home');
+  }
+  function populateTypeFilterRefresh(){
+    const sel = document.getElementById('evType'); const cur = sel.value;
+    sel.innerHTML = '<option value="">All Event Types</option>';
+    [...new Set(MOCK.events.map(e=>e.type))].forEach(t=>{ const o=document.createElement('option'); o.textContent=t; sel.appendChild(o); });
+    sel.value = cur;
+  }
+
+  /* ════════ EVENT PROFILE PAGE ════════ */
+  function openProfile(id){
+    const e = MOCK.events.find(x=>x.id===id);
+    const oppMeta = {
+      'Headline Sponsor':['ic-purple','Top visibility across all event materials and platforms'],
+      'Booth Sponsor':['ic-green','Exhibition booth space to showcase your brand'],
+      'Product Sampling':['ic-amber','Distribute products or promotional items to attendees'],
+      'Workshop Sponsor':['ic-blue','Sponsor a workshop or session during the event'],
+      'Recruitment Partner':['ic-pink','Access to student talent and recruitment opportunities']
+    };
+    document.getElementById('profileContent').innerHTML = `
+      <button class="btn btn-ghost btn-sm" style="margin-bottom:16px" onclick="navTo('hub-home')"><svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"/></svg> Back to Sponsorship Hub</button>
+      <div class="profile-hero">
+        <div class="profile-banner" style="background:${gradFor(e.name)}">
+          <span class="pb-tag">${e.type}</span>
+          <h1>${e.name}</h1>
+          <div class="pb-uni">${e.university} · ${e.location}</div>
+        </div>
+      </div>
+      <div class="profile-grid">
+        <div>
+          <div class="profile-stats">
+            <div class="pstat"><small>Audience</small><b>${e.attendance.toLocaleString()}</b><small>Students</small></div>
+            <div class="pstat"><small>Duration</small><b>${e.duration}</b><small>${e.dateShort}</small></div>
+            <div class="pstat"><small>Location</small><b>${e.location.split(',')[0]}</b><small>${e.format}</small></div>
+            <div class="pstat"><small>Audience Type</small><b style="font-size:15px">${e.audience}</b></div>
+          </div>
+          <div class="profile-section">
+            <h4>About this event</h4>
+            <p>${e.name} is a ${e.duration.toLowerCase()} ${e.type.toLowerCase()} hosted by SU-UNILAG at ${e.university}, bringing together ${e.attendance.toLocaleString()} ${e.audience.toLowerCase()}. ${e.tagline||''} It offers brands a high-impact opportunity to connect with an engaged student community through activations, visibility and direct engagement.</p>
+          </div>
+          <div class="profile-section">
+            <h4>Sponsor Opportunities</h4>
+            <div class="opp-list">
+              ${e.opps.map(o=>{const m=oppMeta[o]||['ic-blue','Custom sponsorship package'];return `<div class="ol"><div class="ol-ico ${m[0]}"><svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75"/></svg></div><div><b style="font-size:14px">${o}</b><div style="font-size:12px;color:var(--body-text)">${m[1]}</div></div></div>`;}).join('')}
+            </div>
+          </div>
+          <div class="profile-section">
+            <h4>Assets</h4>
+            <div class="opp-list">
+              <div class="asset-thumb"><svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909M18 9h.008"/></svg> Event Photos</div>
+              <div class="asset-thumb"><svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5"/></svg> Sponsorship Deck</div>
+            </div>
+          </div>
+        </div>
+        <div class="profile-aside">
+          <div class="cta-card">
+            <div style="font-size:13px;color:var(--muted)">Sponsorship Target</div>
+            <div style="font-size:30px;font-weight:800;margin:4px 0 2px">${NGN(e.target)}</div>
+            <div style="font-size:12px;color:var(--muted);margin-bottom:14px">${e.budget?`of ${NGN(e.budget)} total event budget`:''}</div>
+            <button class="btn btn-primary" style="width:100%;margin-bottom:10px" onclick="toast('Introduction request sent (demo)')">Request Introduction</button>
+            <button class="btn btn-ghost" style="width:100%" onclick="openDrawer(${e.id})">Generate Proposal</button>
+            <hr style="border:none;border-top:1px solid var(--border);margin:18px 0">
+            <div style="text-align:left">
+              <div class="ep-row"><svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z"/></svg><div><b>${e.views} views</b><small>in the last 30 days</small></div></div>
+              <div class="ep-row"><svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.182 15.182a4.5 4.5 0 01-6.364 0M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg><div><b>${e.interests} brand interests</b><small>actively considering</small></div></div>
+              <div class="ep-row"><svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M7.217 10.907a2.25 2.25 0 100 2.186m0-2.186c.18.324.283.696.283 1.093"/></svg><div><b>Total reach</b><small>IG ${e.reach} · Email ${e.email}</small></div></div>
+            </div>
+          </div>
+        </div>
+      </div>`;
+    navTo('event-profile');
+  }
+
+  /* ════════ PROPOSAL DRAWER ════════ */
+  let proposalCtx = { eventId:null, brand:'OPay', type:'Sponsorship Request', length:'3 Pages' };
+  const PROP_TYPES = ['Sponsorship Request','Partnership Proposal','Product Activation Proposal','Recruitment Event Proposal'];
+  const PROP_LENGTHS = ['1 Page','3 Pages','Full Deck'];
+
+  function openDrawer(eventId){
+    proposalCtx.eventId = eventId;
+    renderDrawer();
+    document.getElementById('drawerOverlay').classList.add('open');
+    document.getElementById('proposalDrawer').classList.add('open');
+  }
+  function closeDrawer(){
+    document.getElementById('drawerOverlay').classList.remove('open');
+    document.getElementById('proposalDrawer').classList.remove('open');
+  }
+  function renderDrawer(){
+    document.getElementById('brandGrid').innerHTML = MOCK.brands.map(b=>`
+      <div class="brand-chip ${proposalCtx.brand===b.name?'checked':''}" onclick="proposalCtx.brand='${b.name}';renderDrawer()">
+        <div class="brand-logo" style="background:${b.color}">${b.initial}</div><span>${b.name}</span>
+      </div>`).join('');
+    document.getElementById('propTypeList').innerHTML = PROP_TYPES.map(t=>`
+      <label class="opt-row ${proposalCtx.type===t?'checked':''}" onclick="proposalCtx.type='${t}';renderDrawer()"><input type="radio" name="pt" ${proposalCtx.type===t?'checked':''}> ${t}</label>`).join('');
+    document.getElementById('propLenList').innerHTML = PROP_LENGTHS.map(l=>`
+      <label class="opt-row ${proposalCtx.length===l?'checked':''}" onclick="proposalCtx.length='${l}';renderDrawer()"><input type="radio" name="pl" ${proposalCtx.length===l?'checked':''}> ${l}</label>`).join('');
+  }
+
+  async function generateProposal(){
+    const btn = document.getElementById('genBtn');
+    btn.innerHTML = '<span class="spinner"></span> Generating...';
+    btn.disabled = true;
+    let text;
+    try {
+      if (AI_CONFIG.useBackend){
+        const e = MOCK.events.find(x=>x.id===proposalCtx.eventId);
+        const res = await fetch(AI_CONFIG.endpoint, { method:'POST', headers:{'Content-Type':'application/json'},
+          body: JSON.stringify({ event:e, brand:proposalCtx.brand, type:proposalCtx.type, length:proposalCtx.length }) });
+        text = (await res.json()).proposal;
+      } else {
+        await new Promise(r=>setTimeout(r,900));
+        text = mockProposal();
+      }
+    } catch(err){ text = mockProposal(); }
+    btn.innerHTML = '✨ Generate Proposal'; btn.disabled = false;
+    closeDrawer();
+    document.getElementById('proposalDoc').innerHTML = text;
+    openModal('proposalModal');
+  }
+
+  function mockProposal(){
+    const e = MOCK.events.find(x=>x.id===proposalCtx.eventId) || MOCK.events[0];
+    const { brand, type, length } = proposalCtx;
+    const opps = e.opps.join(', ');
+    const intro = `Dear ${brand} Partnerships Team,`;
+    const body = `
+<h2>${type} — ${e.name}</h2>
+<p><b>Prepared for:</b> ${brand}<br><b>Prepared by:</b> SU-UNILAG, ${e.university}<br><b>Event date:</b> ${e.dateShort}</p>
+
+<p>${intro}</p>
+
+<p>SU-UNILAG invites <b>${brand}</b> to partner with <b>${e.name}</b>, a ${e.duration.toLowerCase()} ${e.type.toLowerCase()} convening <b>${e.attendance.toLocaleString()} ${e.audience.toLowerCase()}</b> at ${e.university}. This is a direct line to a highly engaged student audience that mirrors ${brand}'s target market.</p>
+
+<h2>Why ${brand}</h2>
+<p>${brandAngle(brand)} ${e.name} places your brand at the centre of campus conversation through ${opps.toLowerCase()} — turning visibility into measurable engagement, sign-ups and brand affinity among students.</p>
+
+<h2>Audience Snapshot</h2>
+<p>• ${e.attendance.toLocaleString()} expected attendees (${e.audience})<br>• Instagram reach: ${e.reach} &nbsp; • Email list: ${e.email}<br>• Format: ${e.format} &nbsp; • Location: ${e.location}</p>
+
+<h2>Sponsorship Opportunities</h2>
+<p>${e.opps.map(o=>'• '+o).join('<br>')}</p>
+
+<h2>Investment</h2>
+<p>${e.budget?`The total event budget is <b>${NGN(e.budget)}</b>. `:''}We are seeking a total sponsorship of <b>${NGN(e.target)}</b>${e.budget?` — approximately <b>${Math.round(e.target/e.budget*100)}%</b> of the total budget`:''}, with flexible packages available to match ${brand}'s objectives and budget.</p>
+
+<h2>Expected Outcomes</h2>
+<p>• Direct brand exposure to ${e.attendance.toLocaleString()}+ students<br>• Product trial / sampling and on-ground activation<br>• Social amplification across our channels (${e.reach} reach)<br>• Positioning ${brand} as a champion of student development</p>
+${length==='Full Deck' ? '<h2>Appendix</h2><p>Full deck includes past-edition photos, media coverage, detailed package tiers and deliverables timeline.</p>' : ''}
+<p style="margin-top:18px">We would welcome the opportunity to discuss how ${brand} can bring this event to life. Thank you for your consideration.</p>
+<p><b>SU-UNILAG Sponsorship Team</b><br>${e.university}</p>`;
+    return length==='1 Page' ? body.replace(/<h2>Expected Outcomes<\/h2>[\s\S]*?(?=<p style)/,'') : body;
+  }
+  function brandAngle(b){
+    const map = {
+      'OPay':'As a leading fintech, OPay thrives where young, digitally-native users gather.',
+      'MTN':'MTN’s campus growth depends on visibility among students at moments that matter.',
+      'Airtel':'Airtel can win student loyalty through data-driven activations on campus.',
+      'GTBank':'GTBank’s youth banking proposition aligns naturally with university communities.',
+      'Sterling':'Sterling’s focus on education and youth makes this a natural fit.',
+      'Coca-Cola':'Coca-Cola’s brand love is built at high-energy student moments like this.',
+      'Google':'Google’s developer and student programs map directly onto this technical audience.',
+      'Flutterwave':'Flutterwave can reach the next generation of builders and entrepreneurs here.',
+      'Custom Brand':'Your brand can own a distinctive moment with this student community.'
+    };
+    return map[b] || map['Custom Brand'];
+  }
+  function copyProposal(){
+    const tmp = document.getElementById('proposalDoc').innerText;
+    navigator.clipboard.writeText(tmp).then(()=>toast('Proposal copied to clipboard'));
+  }
+
+  /* ── Share / modals / toast ────────────────────────────── */
+  function openShare(id){
+    const e = MOCK.events.find(x=>x.id===id);
+    const slug = e.name.toLowerCase().replace(/[^a-z0-9]+/g,'-');
+    document.getElementById('shareUrl').value = 'https://grow.cubbes.app/e/'+slug;
+    openModal('shareModal');
+  }
+  function copyShare(){ const i=document.getElementById('shareUrl'); i.select(); navigator.clipboard.writeText(i.value).then(()=>toast('Link copied')); }
+  function openModal(id){ document.getElementById(id).classList.add('open'); }
+  function closeModal(id){ document.getElementById(id).classList.remove('open'); }
+  let toastTimer;
+  function toast(msg){ const t=document.getElementById('toast'); document.getElementById('toastMsg').textContent=msg; t.classList.add('show'); clearTimeout(toastTimer); toastTimer=setTimeout(()=>t.classList.remove('show'),2600); }
+
+  document.addEventListener('keydown', e=>{ if(e.key==='Escape'){ closeDrawer(); closeModal('proposalModal'); closeModal('shareModal'); toggleSidebar(false); } });
+
+  /* ── Init ────────────────────────────── */
+  populateTypeFilter();
+  renderEvents();
+  renderDrawer();
+  </script>
+</body>
+</html>
